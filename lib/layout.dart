@@ -1,5 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:robo_lab_web/widgets/large_screen.dart';
+import 'package:robo_lab_web/widgets/side_menu.dart';
+import 'package:robo_lab_web/widgets/small_screen.dart';
 import 'package:robo_lab_web/widgets/top_bar.dart';
+
+import 'helpers/responsivness.dart';
 
 class SiteLayout extends StatefulWidget {
   //final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey();
@@ -16,7 +21,13 @@ class _SiteLayoutState extends State<SiteLayout> {
     return Scaffold(
       key: scaffoldKey,
       appBar: topNavigationBar(context, scaffoldKey),
-      drawer: Drawer(),
+      drawer: Drawer(
+        child: SideMenu(),
+      ),
+      body: ResponsiveWidget(
+        largeScreen: LargeScreen(),
+        smallScreen: SmallScreen(),
+      ),
     );
   }
 }

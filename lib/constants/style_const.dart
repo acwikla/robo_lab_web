@@ -9,3 +9,5 @@ Color powderBlue = Color(0xFFB0E0E6);
 Color lightSteelBlue = Color(0xFFB0C4DE);
 Color peachPuff = Color(0xFFFFDAB9);
 Color papayaWhip = Color(0xFFFFEFD5);
+Color skyBlue = Color(0xFF87CEEB);
+Color steelBlue = Color(0xFF7496c2);

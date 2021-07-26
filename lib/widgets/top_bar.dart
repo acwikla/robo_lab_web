@@ -8,7 +8,10 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
         children: [
           Container(
             padding: EdgeInsets.only(left: 20),
-            child: Icon(Icons.toys_sharp, color: papayaWhip, size: 35),
+            //precision_manufacturing
+            //toys_sharp
+            child: Icon(Icons.precision_manufacturing_sharp,
+                color: papayaWhip, size: 35),
           )
         ],
       ),
@@ -57,7 +60,7 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
               //padding: EdgeInsets.all(2),
               margin: EdgeInsets.all(2),
               child: CircleAvatar(
-                backgroundColor: lightSteelBlue,
+                backgroundColor: steelBlue,
                 child: Icon(
                   Icons.person_outline,
                   color: papayaWhip,
@@ -68,5 +71,5 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
         ],
       ),
       iconTheme: IconThemeData(color: papayaWhip),
-      backgroundColor: lightSteelBlue,
+      backgroundColor: steelBlue,
     );
