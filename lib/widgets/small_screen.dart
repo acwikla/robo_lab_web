@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:robo_lab_web/helpers/local_navigator.dart';
 
 class SmallScreen extends StatelessWidget {
   const SmallScreen({Key? key}) : super(key: key);
@@ -6,8 +7,6 @@ class SmallScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(horizontal: 16),
-      //child: localNavigator()
-    );
+        padding: EdgeInsets.symmetric(horizontal: 16), child: localNavigator());
   }
 }
