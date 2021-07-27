@@ -9,7 +9,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case HomePageRoute:
       return _getPageRoute(HomePage());
     case SetJobPageRoute:
-      return _getPageRoute(HomePage());
+      return _getPageRoute(SetJobPage());
     case DevicePropertiesPageRoute:
       return _getPageRoute(HomePage());
     case DiagramsPageRoute:

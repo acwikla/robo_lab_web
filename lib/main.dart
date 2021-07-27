@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:robo_lab_web/controllers/device_controller.dart';
 import 'package:robo_lab_web/controllers/menu_controller.dart';
 import 'package:robo_lab_web/controllers/navigation_controller.dart';
 import 'constants/style_const.dart';
@@ -9,6 +10,7 @@ import 'layout.dart';
 void main() {
   Get.put(MenuController());
   Get.put(NavigationController());
+  Get.put(DeviceController());
   runApp(MyApp());
 }
 
