@@ -1,5 +1,5 @@
 const HomePageRoute = "Home";
-const SetJobPageRoute = "Set Jobs";
+const SetJobPageRoute = "Set Job";
 const DevicePropertiesPageRoute = "Device Properties";
 const DiagramsPageRoute = "Diagrams";
 const AuthenticationPageRoute = "Authentication";
