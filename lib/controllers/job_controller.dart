@@ -1,57 +1,49 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:robo_lab_web/constants/style_const.dart';
-import 'package:robo_lab_web/routing/routes.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class JobController extends GetxController {
   static JobController instance = Get.find();
+  static late ViewJob fetchedJob = ViewJob(
+      id: 0,
+      name: 'name',
+      description: 'description',
+      properties: 'properties');
+  static late List<ViewJob> fetchedJobs;
+}
 
-  /*changeActiveItemTo(String itemName) {
-    activeItem.value = itemName;
+Future<ViewJob> fetchJobsForDevType(String devTypeName) async {
+  final response = await http
+      //.get(Uri.parse('http://51.158.163.165/api/jobs?devtype=${devTypeName}'));
+      .get(Uri.parse('http://51.158.163.165/api/jobs/1'));
+
+  JobController.fetchedJob = ViewJob.fromJson(jsonDecode(response.body));
+  //JobController.fetchedJobs = ViewJob.fromJson(jsonDecode(response.body));
+  if (response.statusCode == 200) {
+    return ViewJob.fromJson(jsonDecode(response.body));
+  } else {
+    throw Exception('Failed to fetch jobs for device type: $devTypeName');
   }
+}
 
-  onHover(String itemName) {
-    if (!isActive(itemName)) hoverItem.value = itemName;
+class ViewJob {
+  final int id;
+  final String name;
+  final String description;
+  final String properties;
+
+  ViewJob(
+      {required this.id,
+      required this.name,
+      required this.description,
+      required this.properties});
+
+  factory ViewJob.fromJson(Map<String, dynamic> json) {
+    return ViewJob(
+      id: json['id'],
+      name: json['name'],
+      description: json['description'],
+      properties: json['properties'],
+    );
   }
-
-  isActive(String itemName) => activeItem.value == itemName;
-
-  isHovering(String itemName) => hoverItem.value == itemName;
-
-  Widget returnIconFor(String itemName) {
-    switch (itemName) {
-      case HomePageRoute:
-        //home_filled
-        //roofing_sharp
-        return _customIcon(Icons.home_outlined, itemName);
-      case SetJobPageRoute:
-        //auto_fix_high
-        //assignment_outlined
-        return _customIcon(Icons.assignment_outlined, itemName);
-      case DevicePropertiesPageRoute:
-        //filter_vintage_outlined
-        //grass_sharp
-        //yard_outlined
-        //yard_sharp
-        return _customIcon(Icons.yard_outlined, itemName);
-      case DiagramsPageRoute:
-        //auto_graph_sharp
-        //bar_chart_sharp
-        return _customIcon(Icons.bar_chart_sharp, itemName);
-      case AuthenticationPageRoute:
-        return _customIcon(Icons.logout_sharp, itemName);
-      default:
-        return _customIcon(Icons.logout_sharp, itemName);
-    }
-  }
-
-  //method changes if the icon is active
-  //if the icon is active, it is dark and bigger than the others
-  Widget _customIcon(IconData icon, String itemName) {
-    if (isActive(itemName)) return Icon(icon, size: 22, color: peachPuff);
-
-    //if the icon is inactive, this one will be returned
-    return Icon(icon, color: isHovering(itemName) ? peachPuff : papayaWhip);
-  }*/
 }

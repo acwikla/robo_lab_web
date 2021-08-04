@@ -65,7 +65,6 @@ class _HomePageState extends State<HomePage> {
                             size: 17,
                             color: steelBlue);
                       }
-
                       // By default, show a loading spinner.
                       return const CircularProgressIndicator();
                     },
