@@ -6,6 +6,6 @@ import 'package:robo_lab_web/routing/routes.dart';
 
 Navigator localNavigator() => Navigator(
       key: navigationController.navigationKey,
-      initialRoute: HomePageRoute,
       onGenerateRoute: generateRoute,
+      initialRoute: homePageRoute,
     );

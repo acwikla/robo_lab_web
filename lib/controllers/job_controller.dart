@@ -6,8 +6,6 @@ import 'package:robo_lab_web/routing/routes.dart';
 
 class JobController extends GetxController {
   static JobController instance = Get.find();
-  var device = SetJobPageRoute.obs;
-  var jobsList = SetJobPageRoute.obs;
 
   /*changeActiveItemTo(String itemName) {
     activeItem.value = itemName;

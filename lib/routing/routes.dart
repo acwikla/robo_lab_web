@@ -1,13 +1,13 @@
-const HomePageRoute = "Home";
-const SetJobPageRoute = "Set Job";
-const DevicePropertiesPageRoute = "Device Properties";
-const DiagramsPageRoute = "Diagrams";
-const AuthenticationPageRoute = "Authentication";
+const homePageRoute = "Home";
+const setJobPageRoute = "Set Job";
+const devicePropertiesPageRoute = "Device Properties";
+const diagramsPageRoute = "Diagrams";
+const authenticationPageRoute = "Authentication";
 
 List sideMenuItems = [
-  HomePageRoute,
-  SetJobPageRoute,
-  DevicePropertiesPageRoute,
-  DiagramsPageRoute,
-  AuthenticationPageRoute
+  homePageRoute,
+  setJobPageRoute,
+  devicePropertiesPageRoute,
+  diagramsPageRoute,
+  authenticationPageRoute
 ];

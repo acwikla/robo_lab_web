@@ -6,7 +6,7 @@ import 'package:robo_lab_web/routing/routes.dart';
 
 class MenuController extends GetxController {
   static MenuController instance = Get.find();
-  var activeItem = HomePageRoute.obs;
+  var activeItem = homePageRoute.obs;
   var hoverItem = "".obs;
 
   changeActiveItemTo(String itemName) {
@@ -23,25 +23,25 @@ class MenuController extends GetxController {
 
   Widget returnIconFor(String itemName) {
     switch (itemName) {
-      case HomePageRoute:
+      case homePageRoute:
         //home_filled
         //roofing_sharp
         return _customIcon(Icons.home_outlined, itemName);
-      case SetJobPageRoute:
+      case setJobPageRoute:
         //auto_fix_high
         //assignment_outlined
         return _customIcon(Icons.assignment_outlined, itemName);
-      case DevicePropertiesPageRoute:
+      case devicePropertiesPageRoute:
         //filter_vintage_outlined
         //grass_sharp
         //yard_outlined
         //yard_sharp
         return _customIcon(Icons.yard_outlined, itemName);
-      case DiagramsPageRoute:
+      case diagramsPageRoute:
         //auto_graph_sharp
         //bar_chart_sharp
         return _customIcon(Icons.bar_chart_sharp, itemName);
-      case AuthenticationPageRoute:
+      case authenticationPageRoute:
         return _customIcon(Icons.logout_sharp, itemName);
       default:
         return _customIcon(Icons.logout_sharp, itemName);

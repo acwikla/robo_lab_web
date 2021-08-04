@@ -6,13 +6,13 @@ import 'package:robo_lab_web/routing/routes.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
   switch (settings.name) {
-    case HomePageRoute:
-      return _getPageRoute(HomePage());
-    case SetJobPageRoute:
+    //case homePageRoute:
+    //return _getPageRoute(HomePage());
+    case setJobPageRoute:
       return _getPageRoute(SetJobPage());
-    case DevicePropertiesPageRoute:
+    case devicePropertiesPageRoute:
       return _getPageRoute(HomePage());
-    case DiagramsPageRoute:
+    case diagramsPageRoute:
       return _getPageRoute(HomePage());
     default:
       return _getPageRoute(HomePage());
