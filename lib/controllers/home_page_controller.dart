@@ -9,7 +9,7 @@ class HomePageController extends GetxController {
 
 Future<ViewDevice> fetchDevice(int userId, int deviceId) async {
   final response = await http.get(Uri.parse(
-      'https://localhost:5001/api/users/${userId}/devices/${deviceId}'));
+      'http://51.158.163.165/api/users/${userId}/devices/${deviceId}'));
 
   if (response.statusCode == 200) {
     return ViewDevice.fromJson(jsonDecode(response.body));
