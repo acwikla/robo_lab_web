@@ -4,26 +4,36 @@ import 'dart:convert';
 
 class JobController extends GetxController {
   static JobController instance = Get.find();
-  static late ViewJob fetchedJob = ViewJob(
-      id: 0,
-      name: 'name',
-      description: 'description',
-      properties: 'properties');
-  static late List<ViewJob> fetchedJobs;
 }
 
-Future<ViewJob> fetchJobsForDevType(String devTypeName) async {
-  final response = await http
-      //.get(Uri.parse('http://51.158.163.165/api/jobs?devtype=${devTypeName}'));
-      .get(Uri.parse('http://51.158.163.165/api/jobs/1'));
+Future<ViewJob> fetchJobById(int id) async {
+  final response =
+      await http.get(Uri.parse('http://51.158.163.165/api/jobs/$id'));
 
-  JobController.fetchedJob = ViewJob.fromJson(jsonDecode(response.body));
-  //JobController.fetchedJobs = ViewJob.fromJson(jsonDecode(response.body));
   if (response.statusCode == 200) {
     return ViewJob.fromJson(jsonDecode(response.body));
   } else {
+    throw Exception('Failed to fetch jobs for device type: $id');
+  }
+}
+
+Future<List<ViewJob>> fetchJobsForDevType(String devTypeName) async {
+  final response = await http
+      .get(Uri.parse('http://51.158.163.165/api/jobs?devtype=${devTypeName}'));
+
+  if (response.statusCode == 200) {
+    //return ViewJob.fromJson(jsonDecode(response.body));
+    return returnList(response);
+  } else {
     throw Exception('Failed to fetch jobs for device type: $devTypeName');
   }
+}
+
+List<ViewJob> returnList(response) {
+  Iterable l = json.decode(response.body);
+  List<ViewJob> jobs =
+      List<ViewJob>.from(l.map((model) => ViewJob.fromJson(model)));
+  return jobs;
 }
 
 class ViewJob {
