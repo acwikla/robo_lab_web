@@ -3,7 +3,6 @@ import 'package:get/get.dart';
 import 'package:robo_lab_web/constants/controllers_instance.dart';
 import 'package:robo_lab_web/constants/style_const.dart';
 import 'package:robo_lab_web/helpers/responsivness.dart';
-import 'package:robo_lab_web/patterns/custom_text.dart';
 import 'package:robo_lab_web/routing/routes.dart';
 import 'package:robo_lab_web/widgets/side_menu_item.dart';
 

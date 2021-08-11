@@ -5,15 +5,11 @@ class RequestsHelper {
   static Future<List<T>> get<T>(
     url,
     T Function(Map<String, dynamic> jsonMap) fromMap,
-    //{
-    //String body = '',
-    //String token = ''
-    //}
+    //{ String token = '' }
   ) async {
-    final response = await http.post(
+    final response = await http.get(
       Uri.parse(url),
       headers: {"Content-Type": "application/json"},
-      //body: body,
     ); // request
     if (response.statusCode == 200) {
       final parsed = jsonDecode(response.body)
