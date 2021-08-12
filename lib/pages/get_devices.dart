@@ -5,10 +5,10 @@ import 'package:robo_lab_web/requests/device_requests.dart';
 
 class DevicesPage extends StatefulWidget {
   @override
-  _DevicesViewState createState() => _DevicesViewState();
+  _DevicesPageState createState() => _DevicesPageState();
 }
 
-class _DevicesViewState extends State<DevicesPage> {
+class _DevicesPageState extends State<DevicesPage> {
   late Future<List<ViewDeviceDto>> _devices;
 
   @override
@@ -20,7 +20,6 @@ class _DevicesViewState extends State<DevicesPage> {
   @override
   Widget build(BuildContext context) {
     return _buildListView(context);
-    //return Text('datadasdsa');
   }
 
   Widget _buildListView(BuildContext context) {

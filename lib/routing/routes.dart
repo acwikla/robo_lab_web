@@ -4,6 +4,7 @@ const devicePropertiesPageRoute = "Device Properties";
 const diagramsPageRoute = "Diagrams";
 const authenticationPageRoute = "Authentication";
 const devices = "Devices";
+const exampleTable = "Example Table";
 
 List sideMenuItems = [
   homePageRoute,
@@ -11,5 +12,6 @@ List sideMenuItems = [
   devicePropertiesPageRoute,
   diagramsPageRoute,
   devices,
+  exampleTable,
   authenticationPageRoute,
 ];
