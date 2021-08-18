@@ -65,16 +65,72 @@ class _SetJobPageState extends State<SetJobPage> {
                   style:
                       TextStyle(fontStyle: FontStyle.italic, fontSize: 16))));
     } else {
-      return ListView.builder(
+      return Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[_showSelectedJob(context), _fillData(context)]);
+    }
+  }
+
+  Widget _showSelectedJob(BuildContext context) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text('Selected job',
+          style: TextStyle(
+              color: Colors.black87,
+              fontSize: 17,
+              fontWeight: FontWeight.w600)),
+      Divider(color: Colors.grey),
+      Padding(
+        padding: EdgeInsets.all(5),
+        child: Text(selectedJob!.name, style: TextStyle(fontSize: 16)),
+      ),
+      Padding(
+        padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
+        child: Text(selectedJob!.description,
+            style: TextStyle(color: Colors.black54, fontSize: 14)),
+      ),
+      SizedBox(height: 30)
+    ]);
+  }
+
+  Widget _fillData(BuildContext context) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+      Text('Please fill the data',
+          style: TextStyle(
+              color: Colors.black87,
+              fontSize: 17,
+              fontWeight: FontWeight.w600)),
+      Divider(color: Colors.grey),
+      ListView.builder(
           shrinkWrap: true,
           itemCount: jobsProperties.length ?? 0,
           itemBuilder: (BuildContext context, index) {
-            return Card(
-              child: Text(jobsProperties[index].name.toString()),
-              //child: _buildItemsForListView(snapshot.data![index]),
+            return Column(
+              children: [
+                new Row(
+                  children: [
+                    new Flexible(
+                      child: new TextField(
+                        cursorColor: Colors.grey,
+                        decoration: new InputDecoration(
+                            fillColor: Colors.black26,
+                            focusedBorder: OutlineInputBorder(
+                              borderSide: const BorderSide(
+                                  color: Colors.black26, width: 2.0),
+                              borderRadius: BorderRadius.circular(15.0),
+                            ),
+                            border: new OutlineInputBorder(
+                                borderSide: new BorderSide(color: Colors.teal)),
+                            labelText: jobsProperties[index].name,
+                            labelStyle: TextStyle(color: Colors.black38)),
+                      ),
+                    ),
+                  ],
+                ),
+                SizedBox(height: 15)
+              ],
             );
-          });
-    }
+          })
+    ]);
   }
 
   Widget _buildDropDownList(BuildContext context) {
