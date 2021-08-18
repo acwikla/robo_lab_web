@@ -10,10 +10,27 @@ class SetJobPage extends StatefulWidget {
   createState() => _SetJobPageState();
 }
 
+class JobProperties {
+  JobProperties({
+    required this.name,
+    required this.type,
+    this.min,
+    this.max,
+  });
+
+  String name;
+  String type;
+  int? min;
+  int? max;
+}
+
 class _SetJobPageState extends State<SetJobPage> {
   late Future<List<JobDto>> _viewJobs;
-  JobDto? selectedJob = JobDto(
-      id: 0, name: '0', description: '0', properties: '0', deviceTypeName: '0');
+  JobDto? selectedJob;
+  late List<JobProperties> jobsProperties = [
+    new JobProperties(name: 'propName1', type: 'string'),
+    new JobProperties(name: 'propName2', type: 'string')
+  ];
 
   @override
   void initState() {
@@ -24,13 +41,39 @@ class _SetJobPageState extends State<SetJobPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
-        child: ListView(children: [
-      SizedBox(
-        height: 50,
-      ),
+        child: ListView(padding: new EdgeInsets.all(7.0), children: [
+      Text('Submit a job for your device',
+          style: TextStyle(
+              color: darkerSteelBlue,
+              fontSize: 20,
+              fontWeight: FontWeight.bold)),
+      SizedBox(height: 30),
       //_buildTable(context)
-      _buildDropDownList(context)
+      _buildDropDownList(context),
+      SizedBox(height: 30),
+      _fillInData(context)
     ]));
+  }
+
+  Widget _fillInData(BuildContext context) {
+    if (selectedJob == null) {
+      return Card(
+          child: ListTile(
+              leading: Icon(Icons.ballot_outlined, size: 25), //(size: 56.0),
+              title: Text('Summary', style: TextStyle(fontSize: 17)),
+              subtitle: Text('No job has been selected',
+                  style:
+                      TextStyle(fontStyle: FontStyle.italic, fontSize: 16))));
+    } else {
+      return ListView.builder(
+          itemCount: 2,
+          itemBuilder: (BuildContext context, index) {
+            return Card(
+              child: Text(jobsProperties[index].name.toString()),
+              //child: _buildItemsForListView(snapshot.data![index]),
+            );
+          });
+    }
   }
 
   Widget _buildDropDownList(BuildContext context) {
@@ -41,8 +84,14 @@ class _SetJobPageState extends State<SetJobPage> {
             return Center(child: CircularProgressIndicator(color: skyBlue));
           } else {
             return DropdownButton<JobDto>(
+              style: TextStyle(fontSize: 17),
               hint: Text("Select job"),
-              value: snapshot.data![0],
+              value: selectedJob,
+              onChanged: (newValue) {
+                setState(() {
+                  selectedJob = newValue;
+                });
+              },
               items: snapshot.data!.map((job) {
                 return DropdownMenuItem(
                   value: job,
@@ -59,17 +108,12 @@ class _SetJobPageState extends State<SetJobPage> {
                   ),
                 );
               }).toList(),
-              onChanged: (newValue) {
-                setState(() {
-                  selectedJob = newValue;
-                });
-              },
             );
           }
         });
   }
 
-  Widget _buildTable(BuildContext context) {
+  /*Widget _buildTable(BuildContext context) {
     return FutureBuilder<List<JobDto>>(
       future: _viewJobs,
       builder: (context, snapshot) {
@@ -119,5 +163,5 @@ class _SetJobPageState extends State<SetJobPage> {
         }
       },
     );
-  }
+  }*/
 }
