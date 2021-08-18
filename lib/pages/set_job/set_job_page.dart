@@ -66,7 +66,8 @@ class _SetJobPageState extends State<SetJobPage> {
                       TextStyle(fontStyle: FontStyle.italic, fontSize: 16))));
     } else {
       return ListView.builder(
-          itemCount: 2,
+          shrinkWrap: true,
+          itemCount: jobsProperties.length ?? 0,
           itemBuilder: (BuildContext context, index) {
             return Card(
               child: Text(jobsProperties[index].name.toString()),
