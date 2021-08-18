@@ -4,14 +4,14 @@ import 'package:robo_lab_web/dto/view_user_dto.dart';
 
 class GlobalData {
   static final DeviceTypeDTO globalDeviceType =
-      DeviceTypeDTO(name: 'SmartTerra', id: 1);
+      DeviceTypeDTO(name: 'Dobot Magician V2', id: 3);
 
-  static final ViewUserDTO globalUser =
-      ViewUserDTO(id: 1, login: 'ola', email: 'buuu.email@gmail.com');
+  static final ViewUserDTO globalUser = ViewUserDTO(
+      id: 3, login: 'RoboLab User', email: 'roboLab.email@gmail.com');
 
   static final ViewDeviceDto globalDevice = ViewDeviceDto(
-      id: 1,
-      name: 'Test device 1 (SmartTerra)',
+      id: 100,
+      name: 'Dobot Magician V2 (RoboArm)',
       deviceType: globalDeviceType,
       user: globalUser);
 }

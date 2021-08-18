@@ -10,26 +10,49 @@ class SetJobPage extends StatefulWidget {
   createState() => _SetJobPageState();
 }
 
-class JobProperties {
-  JobProperties({
-    required this.name,
-    required this.type,
+class JobProperty {
+  JobProperty({
+    this.name,
+    this.type,
     this.min,
     this.max,
   });
 
-  String name;
-  String type;
+  String? name;
+  String? type;
   int? min;
   int? max;
+
+  static void mapString(String properties) {
+    if (properties != '') {
+      JobProperty jobProperty;
+      JobProperty jobProperty2;
+      int commaIndex;
+      for (int i = 0; i < properties.length; i++) {
+        //jobProperty2 = new JobProperty(name: 'bu');
+        //_SetJobPageState.jobsProperties.add(jobProperty2);
+        if (properties.substring(i, i + 5) == 'name') {
+          i += 5;
+          for (int j = i; i < properties.length; j++) {
+            if (properties[j] == ',') {
+              commaIndex = j;
+              jobProperty = new JobProperty(name: properties.substring(i, j));
+              _SetJobPageState.jobsProperties.add(jobProperty);
+              return;
+            }
+          }
+        }
+      }
+    }
+  }
 }
 
 class _SetJobPageState extends State<SetJobPage> {
   late Future<List<JobDto>> _viewJobs;
   JobDto? selectedJob;
-  late List<JobProperties> jobsProperties = [
-    new JobProperties(name: 'propName1', type: 'string'),
-    new JobProperties(name: 'propName2', type: 'string')
+  static late List<JobProperty> jobsProperties = [
+    new JobProperty(name: 'propName1', type: 'string'),
+    new JobProperty(name: 'propName2', type: 'string')
   ];
 
   @override
@@ -65,6 +88,7 @@ class _SetJobPageState extends State<SetJobPage> {
                   style:
                       TextStyle(fontStyle: FontStyle.italic, fontSize: 16))));
     } else {
+      //JobProperty.mapString(selectedJob!.properties);
       return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[_showSelectedJob(context), _fillData(context)]);
