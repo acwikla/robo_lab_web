@@ -1,4 +1,4 @@
-import 'dart:js_util';
+/*import 'dart:js_util';
 
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
@@ -94,3 +94,4 @@ class ViewJob {
     );
   }
 }
+*/

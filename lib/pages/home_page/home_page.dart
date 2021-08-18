@@ -5,8 +5,6 @@ import 'package:robo_lab_web/constants/style_const.dart';
 import 'package:robo_lab_web/controllers/home_page_controller.dart';
 import 'package:robo_lab_web/helpers/responsivness.dart';
 import 'package:robo_lab_web/patterns/custom_text.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
 
 class HomePage extends StatefulWidget {
   const HomePage({Key? key}) : super(key: key);

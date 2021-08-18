@@ -1,113 +1,123 @@
-import 'dart:html';
-
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
-import 'package:get/get.dart';
-import 'package:robo_lab_web/constants/controllers_instance.dart';
 import 'package:robo_lab_web/constants/style_const.dart';
-import 'package:robo_lab_web/controllers/job_controller.dart';
-import 'package:robo_lab_web/helpers/responsivness.dart';
+import 'package:robo_lab_web/dto/job_dto.dart';
+import 'package:robo_lab_web/global_data.dart';
 import 'package:robo_lab_web/patterns/custom_text.dart';
-import 'package:http/http.dart' as http;
-import 'dart:convert';
-import 'package:json_table/json_table.dart';
+import 'package:robo_lab_web/requests/job_requests.dart';
 
 class SetJobPage extends StatefulWidget {
-  const SetJobPage({Key? key}) : super(key: key);
-
   @override
-  _SetJobPage createState() => _SetJobPage();
+  createState() => _SetJobPageState();
 }
 
-//zeby byla mozliwosc nawigacji pomiedzy kartami obowiazkowo Obx??
-class _SetJobPage extends State<SetJobPage> {
-  final String apiUrl = "http://51.158.163.165/api/jobs?devtype=SmartTerra";
-  String jsonJob =
-      '[{"id":1,"name":"TurnOnLED","description":"Turn on the LED strip and set color of the LEDs .","properties":"","deviceTypeName":"SmartTerra"},{"id":2,"name":"TurnOffLED","description":"Turn off the LED strip.","properties":"","deviceTypeName":"SmartTerra"},{"id":3,"name":"TurnOnWaterPump","description":"Turn on the water pump for given period of time.","properties":"","deviceTypeName":"SmartTerra"}]';
-  Future<List<ViewJob>> fetchJobs() async {
-    var result = await http.get(Uri.parse(apiUrl));
-    jsonJob = result.toString();
-    return json.decode(result.body);
-  }
+class _SetJobPageState extends State<SetJobPage> {
+  late Future<List<JobDto>> _viewJobs;
+  JobDto? selectedJob = JobDto(
+      id: 0, name: '0', description: '0', properties: '0', deviceTypeName: '0');
 
-  String _name(dynamic job) {
-    return job['name'];
-  }
-
-  String _description(dynamic job) {
-    return job['description'];
-  }
-
-  String _properties(dynamic job) {
-    return job['properties'];
-  }
-
-  final String jsonSample =
-      '[{"name":"Ram","email":"ram@gmail.com","age":23,"income":"10Rs","country":"India","area":"abc"},{"name":"Shyam","email":"shyam23@gmail.com",'
-      '"age":28,"income":"30Rs","country":"India","area":"abc","day":"Monday","month":"april"},{"name":"John","email":"john@gmail.com","age":33,"income":"15Rs","country":"India",'
-      '"area":"abc","day":"Monday","month":"april"},{"name":"Ram","email":"ram@gmail.com","age":23,"income":"10Rs","country":"India","area":"abc","day":"Monday","month":"april"},'
-      '{"name":"Shyam","email":"shyam23@gmail.com","age":28,"income":"30Rs","country":"India","area":"abc","day":"Monday","month":"april"},{"name":"John","email":"john@gmail.com",'
-      '"age":33,"income":"15Rs","country":"India","area":"abc","day":"Monday","month":"april"},{"name":"Ram","email":"ram@gmail.com","age":23,"income":"10Rs","country":"India",'
-      '"area":"abc","day":"Monday","month":"april"},{"name":"Shyam","email":"shyam23@gmail.com","age":28,"income":"30Rs","country":"India","area":"abc","day":"Monday","month":"april"},'
-      '{"name":"John","email":"john@gmail.com","age":33,"income":"15Rs","country":"India","area":"abc","day":"Monday","month":"april"},{"name":"Ram","email":"ram@gmail.com","age":23,'
-      '"income":"10Rs","country":"India","area":"abc","day":"Monday","month":"april"},{"name":"Shyam","email":"shyam23@gmail.com","age":28,"income":"30Rs","country":"India","area":"abc",'
-      '"day":"Monday","month":"april"},{"name":"John","email":"john@gmail.com","age":33,"income":"15Rs","country":"India","area":"abc","day":"Monday","month":"april"}]';
-  bool toggle = true;
-
-  List<TableRow> tableRows = [];
   @override
   void initState() {
     super.initState();
-    fetchJobs();
+    _viewJobs = JobRequests.getJobsForDevType(GlobalData.globalDeviceType.name);
   }
 
   @override
   Widget build(BuildContext context) {
-    var json = jsonDecode(jsonJob);
-    return Scaffold(
-      body: SingleChildScrollView(
-        padding: EdgeInsets.all(16.0),
-        child: Container(
-          child: toggle
-              ? Column(
-                  children: [
-                    JsonTable(
-                      json,
-                      showColumnToggle: true,
-                      allowRowHighlight: true,
-                      rowHighlightColor: Colors.yellow[500]!.withOpacity(0.7),
-                      paginationRowCount: 4,
-                      onRowSelect: (index, map) {
-                        print(index);
-                        print(map);
-                      },
-                    ),
-                    SizedBox(
-                      height: 40.0,
-                    ),
-                    Text("Simple table which creates table direclty from json")
-                  ],
-                )
-              : Center(
-                  child: Text(getPrettyJSONString(jsonJob)),
-                ),
-        ),
+    return Container(
+        child: ListView(children: [
+      SizedBox(
+        height: 50,
       ),
-      floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.grid_on),
-          onPressed: () {
-            setState(
-              () {
-                toggle = !toggle;
-              },
-            );
-          }),
-    );
+      //_buildTable(context)
+      _buildDropDownList(context)
+    ]));
   }
 
-  String getPrettyJSONString(jsonObject) {
-    JsonEncoder encoder = new JsonEncoder.withIndent('  ');
-    String jsonString = encoder.convert(json.decode(jsonObject));
-    return jsonString;
+  Widget _buildDropDownList(BuildContext context) {
+    return FutureBuilder<List<JobDto>>(
+        future: _viewJobs,
+        builder: (context, snapshot) {
+          if (snapshot.hasData == false) {
+            return Center(child: CircularProgressIndicator(color: skyBlue));
+          } else {
+            return DropdownButton<JobDto>(
+              hint: Text("Select job"),
+              value: snapshot.data![0],
+              items: snapshot.data!.map((job) {
+                return DropdownMenuItem(
+                  value: job,
+                  child: Row(
+                    children: <Widget>[
+                      SizedBox(
+                        width: 10,
+                      ),
+                      Text(
+                        job.name,
+                        style: TextStyle(color: Colors.black),
+                      ),
+                    ],
+                  ),
+                );
+              }).toList(),
+              onChanged: (newValue) {
+                setState(() {
+                  selectedJob = newValue;
+                });
+              },
+            );
+          }
+        });
+  }
+
+  Widget _buildTable(BuildContext context) {
+    return FutureBuilder<List<JobDto>>(
+      future: _viewJobs,
+      builder: (context, snapshot) {
+        if (snapshot.hasData == false) {
+          return Center(child: CircularProgressIndicator(color: skyBlue));
+        } else {
+          return DataTable(
+            decoration: BoxDecoration(),
+            dataRowHeight: 50,
+            columns: const <DataColumn>[
+              DataColumn(
+                label: Text('Name',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+              ),
+              DataColumn(
+                label: Text('Description',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+              ),
+              DataColumn(
+                label: Text('Properties',
+                    style:
+                        TextStyle(fontWeight: FontWeight.bold, fontSize: 15)),
+              ),
+            ],
+            rows: List<DataRow>.generate(
+              snapshot.data?.length ?? 0,
+              (int index) => DataRow(
+                color: MaterialStateProperty.resolveWith<Color?>(
+                    (Set<MaterialState> states) {
+                  // All rows will have the same selected color.
+                  // Even rows will have a grey color.
+                  if (index.isEven) {
+                    return darkerPeachPuff.withOpacity(0.3);
+                  }
+                  return null; // Use default value for other states and odd rows.
+                }),
+                cells: <DataCell>[
+                  DataCell(Text(snapshot.data![index].name.toString())),
+                  DataCell(Text(snapshot.data![index].description.toString())),
+                  DataCell(Text(snapshot.data![index].properties.toString())),
+                ],
+              ),
+            ),
+          );
+        }
+      },
+    );
   }
 }
