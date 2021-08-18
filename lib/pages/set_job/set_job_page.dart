@@ -37,7 +37,7 @@ class JobProperty {
             if (properties[j] == ',') {
               commaIndex = j;
               jobProperty = new JobProperty(name: properties.substring(i, j));
-              _SetJobPageState.jobsProperties.add(jobProperty);
+              //_SetJobPageState.jobsProperties.add(jobProperty);
               return;
             }
           }
@@ -50,10 +50,11 @@ class JobProperty {
 class _SetJobPageState extends State<SetJobPage> {
   late Future<List<JobDto>> _viewJobs;
   JobDto? selectedJob;
-  static late List<JobProperty> jobsProperties = [
+  static List<JobProperty>? jobsProperties;
+  /*= [
     new JobProperty(name: 'propName1', type: 'string'),
     new JobProperty(name: 'propName2', type: 'string')
-  ];
+  ];*/
 
   @override
   void initState() {
@@ -126,7 +127,7 @@ class _SetJobPageState extends State<SetJobPage> {
       Divider(color: Colors.grey),
       ListView.builder(
           shrinkWrap: true,
-          itemCount: jobsProperties.length ?? 0,
+          itemCount: jobsProperties?.length ?? 0,
           itemBuilder: (BuildContext context, index) {
             return Column(
               children: [
@@ -144,7 +145,7 @@ class _SetJobPageState extends State<SetJobPage> {
                             ),
                             border: new OutlineInputBorder(
                                 borderSide: new BorderSide(color: Colors.teal)),
-                            labelText: jobsProperties[index].name,
+                            labelText: jobsProperties![index].name,
                             labelStyle: TextStyle(color: Colors.black38)),
                       ),
                     ),
