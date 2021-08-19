@@ -212,7 +212,7 @@ class _SetJobPageState extends State<SetJobPage> {
                   title: Text(
                       'The job has been successfully submitted for a device with Id' +
                           '${GlobalData.globalDevice.id}' +
-                          'with body:' +
+                          ', with job body: ' +
                           '${snapshot.data!.body}')));
         } else if (snapshot.hasError) {
           return Card(child: ListTile(title: Text('${snapshot.error}')));
