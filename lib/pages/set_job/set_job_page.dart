@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:robo_lab_web/constants/style_const.dart';
+import 'package:robo_lab_web/dto/device_job_dto.dart';
 import 'package:robo_lab_web/dto/job_dto.dart';
 import 'package:robo_lab_web/global_data.dart';
 import 'package:robo_lab_web/patterns/custom_text.dart';
+import 'package:robo_lab_web/requests/device_jobs_requests.dart';
 import 'package:robo_lab_web/requests/job_requests.dart';
 
 class SetJobPage extends StatefulWidget {
@@ -24,6 +26,7 @@ class JobProperty {
   int? max;
 
   static void mapString(String properties) {
+    _SetJobPageState.jobsProperties = [];
     if (properties != '') {
       JobProperty jobProperty;
       for (int i = 0; i < properties.length; i++) {
@@ -31,12 +34,13 @@ class JobProperty {
           String searchString = properties.substring(i, i + 4);
           if (searchString.contains('name')) {
             i += 4;
-            for (int j = i; i < properties.length; j++) {
+            for (int j = i; j < properties.length; j++) {
               if (properties[j] == ',') {
                 jobProperty =
                     new JobProperty(name: properties.substring(i + 1, j));
                 _SetJobPageState.jobsProperties?.add(jobProperty);
-                return;
+                break;
+                //return;
               }
             }
           }
@@ -50,7 +54,11 @@ class _SetJobPageState extends State<SetJobPage> {
   late Future<List<JobDto>> _viewJobs;
   JobDto? selectedJob;
   static List<JobProperty>? jobsProperties = [];
-  String filledData = '';
+  String filledProperty = '';
+
+  DeviceJobDto? newDeviceJob = new DeviceJobDto();
+  Future<DeviceJobDto>? _futureDeviceJob;
+  final TextEditingController _controller = TextEditingController();
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   void initState() {
@@ -88,7 +96,10 @@ class _SetJobPageState extends State<SetJobPage> {
       JobProperty.mapString(selectedJob!.properties);
       return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[_showSelectedJob(context), _fillData(context)]);
+          children: <Widget>[
+            _showSelectedJob(context),
+            _fillData(context),
+          ]);
     }
   }
 
@@ -133,9 +144,10 @@ class _SetJobPageState extends State<SetJobPage> {
                       children: [
                         new Flexible(
                           child: new TextFormField(
-                              onChanged: (filledData) {
-                                print('First text field: $filledData');
-                              },
+                              //onChanged: (filledProperty) {
+                              //print('First text field: $filledProperty');
+                              //},
+                              controller: _controller,
                               cursorColor: Colors.grey,
                               decoration: new InputDecoration(
                                 fillColor: Colors.black26,
@@ -160,23 +172,55 @@ class _SetJobPageState extends State<SetJobPage> {
                       ],
                     ),
                     SizedBox(height: 15),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 16.0),
-                      child: ElevatedButton(
-                        onPressed: () {
-                          // Validate will return true if the form is valid, or false if
-                          // the form is invalid.
-                          if (_formKey.currentState!.validate()) {
-                            // Process data.
-                          }
-                        },
-                        child: const Text('Submit'),
-                      ),
-                    )
                   ],
                 );
-              })
+              }),
+          Padding(
+            padding: const EdgeInsets.symmetric(vertical: 16.0),
+            child: ElevatedButton(
+              onPressed: () {
+                // Validate will return true if the form is valid, or false if
+                // the form is invalid.
+                if (_formKey.currentState!.validate()) {
+                  // Process data.
+                  setState(() {
+                    newDeviceJob?.body = _controller.text;
+                    newDeviceJob?.executionTime = '2021-08-10T21:36:17.9426078';
+                    _futureDeviceJob = DeviceJobsRequests.postDeviceJob(
+                        1, //GlobalData.globalDevice.id,
+                        1, //selectedJob!.id,
+                        newDeviceJob!);
+                  });
+                  print(newDeviceJob!.body);
+                  print(newDeviceJob!.executionTime);
+                }
+              },
+              child: const Text('Submit'),
+            ),
+          ),
+          _returnRequestMessage(context),
         ]));
+  }
+
+  Widget _returnRequestMessage(BuildContext context) {
+    return FutureBuilder<DeviceJobDto>(
+      future: _futureDeviceJob,
+      builder: (context, snapshot) {
+        if (snapshot.hasData) {
+          return Card(
+              child: ListTile(
+                  title: Text(
+                      'The job has been successfully submitted for a device with Id' +
+                          '${GlobalData.globalDevice.id}' +
+                          'with body:' +
+                          '${snapshot.data!.body}')));
+        } else if (snapshot.hasError) {
+          return Card(child: ListTile(title: Text('${snapshot.error}')));
+        }
+        return //const CircularProgressIndicator();
+            Card(child: ListTile(title: Text('No action was taken')));
+      },
+    );
   }
 
   Widget _buildDropDownList(BuildContext context) {
