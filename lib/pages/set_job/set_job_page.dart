@@ -70,7 +70,7 @@ class _SetJobPageState extends State<SetJobPage> {
   Widget build(BuildContext context) {
     return Container(
         width: 3,
-        child: ListView(padding: new EdgeInsets.all(7.0), children: [
+        child: ListView(padding: new EdgeInsets.all(10.0), children: [
           Text('Submit a job for your device',
               style: TextStyle(
                   color: darkerSteelBlue,
@@ -184,7 +184,10 @@ class _SetJobPageState extends State<SetJobPage> {
   Widget _setDevJobButton(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
       ElevatedButton(
-        style: ButtonStyle(elevation: MaterialStateProperty.all(5)),
+        style: ButtonStyle(
+            elevation: MaterialStateProperty.all(5),
+            backgroundColor: MaterialStateProperty.all(darkSteelBlue),
+            overlayColor: MaterialStateProperty.all(lightSteelBlue)),
         onPressed: () {
           // Validate will return true if the form is valid, or false if
           // the form is invalid.
@@ -217,19 +220,33 @@ class _SetJobPageState extends State<SetJobPage> {
           return Card(
               elevation: 5,
               child: ListTile(
-                  title: Text(
-                      'The job has been successfully submitted for a device with ID: ' +
-                          '${GlobalData.globalDevice.id}' +
-                          ', with job body: ' +
-                          '${snapshot.data!.body}.')));
+                title:
+                    Text('Summary' 'Summary', style: TextStyle(fontSize: 17)),
+                subtitle: Text(
+                    'The job has been successfully submitted for a device with ID: ' +
+                        '${GlobalData.globalDevice.id}' +
+                        ', with job body: ' +
+                        '${snapshot.data!.body}.',
+                    style:
+                        TextStyle(fontStyle: FontStyle.italic, fontSize: 16)),
+              ));
         } else if (snapshot.hasError) {
           return Card(
-              elevation: 5, child: ListTile(title: Text('${snapshot.error}')));
+              elevation: 5,
+              child: ListTile(
+                  title: Text('Summary', style: TextStyle(fontSize: 17)),
+                  subtitle: Text('${snapshot.error}',
+                      style: TextStyle(
+                          fontStyle: FontStyle.italic, fontSize: 16))));
         }
         return //const CircularProgressIndicator();
             Card(
                 elevation: 5,
-                child: ListTile(title: Text('No action was taken.')));
+                child: ListTile(
+                    title: Text('Summary', style: TextStyle(fontSize: 17)),
+                    subtitle: Text('No action was taken.',
+                        style: TextStyle(
+                            fontStyle: FontStyle.italic, fontSize: 16))));
       },
     );
   }
