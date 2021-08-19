@@ -51,7 +51,7 @@ class _SetJobPageState extends State<SetJobPage> {
   JobDto? selectedJob;
   static List<JobProperty>? jobsProperties = [];
   String filledData = '';
-
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
   @override
   void initState() {
     super.initState();
@@ -114,47 +114,69 @@ class _SetJobPageState extends State<SetJobPage> {
   }
 
   Widget _fillData(BuildContext context) {
-    return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text('Please fill the data',
-          style: TextStyle(
-              color: Colors.black87,
-              fontSize: 17,
-              fontWeight: FontWeight.w600)),
-      Divider(color: Colors.grey),
-      ListView.builder(
-          shrinkWrap: true,
-          itemCount: jobsProperties?.length ?? 0,
-          itemBuilder: (BuildContext context, index) {
-            return Column(
-              children: [
-                new Row(
+    return Form(
+        key: _formKey,
+        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Text('Please fill the data',
+              style: TextStyle(
+                  color: Colors.black87,
+                  fontSize: 17,
+                  fontWeight: FontWeight.w600)),
+          Divider(color: Colors.grey),
+          ListView.builder(
+              shrinkWrap: true,
+              itemCount: jobsProperties?.length ?? 0,
+              itemBuilder: (BuildContext context, index) {
+                return Column(
                   children: [
-                    new Flexible(
-                      child: new TextField(
-                        onChanged: (filledData) {
-                          print('First text field: $filledData');
-                        },
-                        cursorColor: Colors.grey,
-                        decoration: new InputDecoration(
-                            fillColor: Colors.black26,
-                            focusedBorder: OutlineInputBorder(
-                              borderSide: const BorderSide(
-                                  color: Colors.black26, width: 2.0),
-                              borderRadius: BorderRadius.circular(15.0),
-                            ),
-                            border: new OutlineInputBorder(
-                                borderSide: new BorderSide(color: Colors.teal)),
-                            labelText: jobsProperties![index].name,
-                            labelStyle: TextStyle(color: Colors.black38)),
-                      ),
+                    new Row(
+                      children: [
+                        new Flexible(
+                          child: new TextFormField(
+                              onChanged: (filledData) {
+                                print('First text field: $filledData');
+                              },
+                              cursorColor: Colors.grey,
+                              decoration: new InputDecoration(
+                                fillColor: Colors.black26,
+                                focusedBorder: OutlineInputBorder(
+                                  borderSide: const BorderSide(
+                                      color: Colors.black26, width: 2.0),
+                                  borderRadius: BorderRadius.circular(15.0),
+                                ),
+                                border: new OutlineInputBorder(
+                                    borderSide:
+                                        new BorderSide(color: Colors.teal)),
+                                labelText: jobsProperties![index].name,
+                                labelStyle: TextStyle(color: Colors.black38),
+                              ),
+                              validator: (String? value) {
+                                if (value == null || value.isEmpty) {
+                                  return 'Please enter some text';
+                                }
+                                return null;
+                              }),
+                        ),
+                      ],
                     ),
+                    SizedBox(height: 15),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16.0),
+                      child: ElevatedButton(
+                        onPressed: () {
+                          // Validate will return true if the form is valid, or false if
+                          // the form is invalid.
+                          if (_formKey.currentState!.validate()) {
+                            // Process data.
+                          }
+                        },
+                        child: const Text('Submit'),
+                      ),
+                    )
                   ],
-                ),
-                SizedBox(height: 15),
-              ],
-            );
-          })
-    ]);
+                );
+              })
+        ]));
   }
 
   Widget _buildDropDownList(BuildContext context) {
