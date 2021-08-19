@@ -26,19 +26,18 @@ class JobProperty {
   static void mapString(String properties) {
     if (properties != '') {
       JobProperty jobProperty;
-      JobProperty jobProperty2;
-      int commaIndex;
       for (int i = 0; i < properties.length; i++) {
-        //jobProperty2 = new JobProperty(name: 'bu');
-        //_SetJobPageState.jobsProperties.add(jobProperty2);
-        if (properties.substring(i, i + 5) == 'name') {
-          i += 5;
-          for (int j = i; i < properties.length; j++) {
-            if (properties[j] == ',') {
-              commaIndex = j;
-              jobProperty = new JobProperty(name: properties.substring(i, j));
-              //_SetJobPageState.jobsProperties.add(jobProperty);
-              return;
+        if (i + 4 < properties.length) {
+          String searchString = properties.substring(i, i + 4);
+          if (searchString.contains('name')) {
+            i += 4;
+            for (int j = i; i < properties.length; j++) {
+              if (properties[j] == ',') {
+                jobProperty =
+                    new JobProperty(name: properties.substring(i + 1, j));
+                _SetJobPageState.jobsProperties?.add(jobProperty);
+                return;
+              }
             }
           }
         }
@@ -50,11 +49,8 @@ class JobProperty {
 class _SetJobPageState extends State<SetJobPage> {
   late Future<List<JobDto>> _viewJobs;
   JobDto? selectedJob;
-  static List<JobProperty>? jobsProperties;
-  /*= [
-    new JobProperty(name: 'propName1', type: 'string'),
-    new JobProperty(name: 'propName2', type: 'string')
-  ];*/
+  static List<JobProperty>? jobsProperties = [];
+  String filledData = '';
 
   @override
   void initState() {
@@ -89,7 +85,7 @@ class _SetJobPageState extends State<SetJobPage> {
                   style:
                       TextStyle(fontStyle: FontStyle.italic, fontSize: 16))));
     } else {
-      //JobProperty.mapString(selectedJob!.properties);
+      JobProperty.mapString(selectedJob!.properties);
       return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[_showSelectedJob(context), _fillData(context)]);
@@ -113,7 +109,7 @@ class _SetJobPageState extends State<SetJobPage> {
         child: Text(selectedJob!.description,
             style: TextStyle(color: Colors.black54, fontSize: 14)),
       ),
-      SizedBox(height: 30)
+      SizedBox(height: 30),
     ]);
   }
 
@@ -135,6 +131,9 @@ class _SetJobPageState extends State<SetJobPage> {
                   children: [
                     new Flexible(
                       child: new TextField(
+                        onChanged: (filledData) {
+                          print('First text field: $filledData');
+                        },
                         cursorColor: Colors.grey,
                         decoration: new InputDecoration(
                             fillColor: Colors.black26,
@@ -151,7 +150,7 @@ class _SetJobPageState extends State<SetJobPage> {
                     ),
                   ],
                 ),
-                SizedBox(height: 15)
+                SizedBox(height: 15),
               ],
             );
           })
