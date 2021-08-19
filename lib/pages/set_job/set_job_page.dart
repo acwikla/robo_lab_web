@@ -69,23 +69,25 @@ class _SetJobPageState extends State<SetJobPage> {
   @override
   Widget build(BuildContext context) {
     return Container(
+        width: 3,
         child: ListView(padding: new EdgeInsets.all(7.0), children: [
-      Text('Submit a job for your device',
-          style: TextStyle(
-              color: darkerSteelBlue,
-              fontSize: 20,
-              fontWeight: FontWeight.bold)),
-      SizedBox(height: 30),
-      //_buildTable(context)
-      _buildDropDownList(context),
-      SizedBox(height: 30),
-      _fillInData(context)
-    ]));
+          Text('Submit a job for your device',
+              style: TextStyle(
+                  color: darkerSteelBlue,
+                  fontSize: 20,
+                  fontWeight: FontWeight.bold)),
+          SizedBox(height: 30),
+          //_buildTable(context)
+          _buildDropDownList(context),
+          SizedBox(height: 30),
+          _fillInData(context)
+        ]));
   }
 
   Widget _fillInData(BuildContext context) {
     if (selectedJob == null) {
       return Card(
+          elevation: 5,
           child: ListTile(
               leading: Icon(Icons.ballot_outlined, size: 25), //(size: 56.0),
               title: Text('Summary', style: TextStyle(fontSize: 17)),
@@ -175,31 +177,36 @@ class _SetJobPageState extends State<SetJobPage> {
                   ],
                 );
               }),
-          Padding(
-            padding: const EdgeInsets.symmetric(vertical: 16.0),
-            child: ElevatedButton(
-              onPressed: () {
-                // Validate will return true if the form is valid, or false if
-                // the form is invalid.
-                if (_formKey.currentState!.validate()) {
-                  // Process data.
-                  setState(() {
-                    newDeviceJob?.body = _controller.text;
-                    newDeviceJob?.executionTime = '2021-08-10T21:36:17.9426078';
-                    _futureDeviceJob = DeviceJobsRequests.postDeviceJob(
-                        1, //GlobalData.globalDevice.id,
-                        1, //selectedJob!.id,
-                        newDeviceJob!);
-                  });
-                  print(newDeviceJob!.body);
-                  print(newDeviceJob!.executionTime);
-                }
-              },
-              child: const Text('Submit'),
-            ),
-          ),
-          _returnRequestMessage(context),
+          _setDevJobButton(context)
         ]));
+  }
+
+  Widget _setDevJobButton(BuildContext context) {
+    return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
+      ElevatedButton(
+        style: ButtonStyle(elevation: MaterialStateProperty.all(5)),
+        onPressed: () {
+          // Validate will return true if the form is valid, or false if
+          // the form is invalid.
+          if (_formKey.currentState!.validate()) {
+            // Process data.
+            setState(() {
+              newDeviceJob?.body = _controller.text;
+              newDeviceJob?.executionTime = '2021-08-10T21:36:17.9426078';
+              _futureDeviceJob = DeviceJobsRequests.postDeviceJob(
+                  1, //GlobalData.globalDevice.id,
+                  1, //selectedJob!.id,
+                  newDeviceJob!);
+            });
+            print(newDeviceJob!.body);
+            print(newDeviceJob!.executionTime);
+          }
+        },
+        child: const Text('Submit'),
+      ),
+      SizedBox(height: 15),
+      _returnRequestMessage(context),
+    ]);
   }
 
   Widget _returnRequestMessage(BuildContext context) {
@@ -208,17 +215,21 @@ class _SetJobPageState extends State<SetJobPage> {
       builder: (context, snapshot) {
         if (snapshot.hasData) {
           return Card(
+              elevation: 5,
               child: ListTile(
                   title: Text(
-                      'The job has been successfully submitted for a device with Id' +
+                      'The job has been successfully submitted for a device with ID: ' +
                           '${GlobalData.globalDevice.id}' +
                           ', with job body: ' +
-                          '${snapshot.data!.body}')));
+                          '${snapshot.data!.body}.')));
         } else if (snapshot.hasError) {
-          return Card(child: ListTile(title: Text('${snapshot.error}')));
+          return Card(
+              elevation: 5, child: ListTile(title: Text('${snapshot.error}')));
         }
         return //const CircularProgressIndicator();
-            Card(child: ListTile(title: Text('No action was taken')));
+            Card(
+                elevation: 5,
+                child: ListTile(title: Text('No action was taken.')));
       },
     );
   }
