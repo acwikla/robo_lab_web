@@ -1,17 +1,16 @@
 class JobBody {
-  JobBody({
-    this.name,
-    this.value,
-  });
+  Map<String, String?> _map = {};
 
-  String? name;
-  String? value;
+  void set(String name, String? value) {
+    _map[name] = value;
+  }
 
-  static String changeListToString(List<JobBody> jobBody) {
-    String stringJobsProperties = '';
-    for (int i = 0; i < jobBody.length; i++) {
-      stringJobsProperties += jobBody[i].name! + ':' + jobBody[i].value! + ';';
-    }
-    return stringJobsProperties;
+  @override
+  String toString() {
+    String result = '';
+    _map.forEach((key, value) {
+      result += key + ':' + (value ?? 'null') + ';';
+    });
+    return result;
   }
 }
