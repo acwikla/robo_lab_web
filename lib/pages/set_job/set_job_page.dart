@@ -3,63 +3,31 @@ import 'package:robo_lab_web/constants/style_const.dart';
 import 'package:robo_lab_web/dto/device_job_dto.dart';
 import 'package:robo_lab_web/dto/job_dto.dart';
 import 'package:robo_lab_web/global_data.dart';
+import 'package:robo_lab_web/patterns/custom_summary_cadr.dart';
 import 'package:robo_lab_web/patterns/custom_text.dart';
 import 'package:robo_lab_web/requests/device_jobs_requests.dart';
 import 'package:robo_lab_web/requests/job_requests.dart';
+import 'package:robo_lab_web/utils/job_body.dart';
+import 'package:robo_lab_web/utils/property.dart';
 
 class SetJobPage extends StatefulWidget {
   @override
   createState() => _SetJobPageState();
 }
 
-class JobProperty {
-  JobProperty({
-    this.name,
-    this.type,
-    this.min,
-    this.max,
-  });
-
-  String? name;
-  String? type;
-  int? min;
-  int? max;
-
-  static void mapString(String properties) {
-    _SetJobPageState.jobsProperties = [];
-    if (properties != '') {
-      JobProperty jobProperty;
-      for (int i = 0; i < properties.length; i++) {
-        if (i + 4 < properties.length) {
-          String searchString = properties.substring(i, i + 4);
-          if (searchString.contains('name')) {
-            i += 4;
-            for (int j = i; j < properties.length; j++) {
-              if (properties[j] == ',') {
-                jobProperty =
-                    new JobProperty(name: properties.substring(i + 1, j));
-                _SetJobPageState.jobsProperties?.add(jobProperty);
-                break;
-                //return;
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
 class _SetJobPageState extends State<SetJobPage> {
   late Future<List<JobDto>> _viewJobs;
   JobDto? selectedJob;
-  static List<JobProperty>? jobsProperties = [];
-  String filledProperty = '';
+
+  List<JobProperty>? jobProperties = [];
+  List<JobBody>? jobBody = [];
+  String _jobBodyValue = '';
+  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+  TextEditingController? _controller; // = TextEditingController();
 
   DeviceJobDto? newDeviceJob = new DeviceJobDto();
   Future<DeviceJobDto>? _futureDeviceJob;
-  final TextEditingController _controller = TextEditingController();
-  final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
+
   @override
   void initState() {
     super.initState();
@@ -80,27 +48,20 @@ class _SetJobPageState extends State<SetJobPage> {
           //_buildTable(context)
           _buildDropDownList(context),
           SizedBox(height: 30),
-          _fillInData(context)
+          viewDevJobData(context)
         ]));
   }
 
-  Widget _fillInData(BuildContext context) {
+  Widget viewDevJobData(BuildContext context) {
     if (selectedJob == null) {
-      return Card(
-          elevation: 5,
-          child: ListTile(
-              leading: Icon(Icons.ballot_outlined, size: 25), //(size: 56.0),
-              title: Text('Summary', style: TextStyle(fontSize: 17)),
-              subtitle: Text('No job has been selected',
-                  style:
-                      TextStyle(fontStyle: FontStyle.italic, fontSize: 16))));
+      return CustomSummaryCard(subtitleText: 'No job has been selected');
     } else {
-      JobProperty.mapString(selectedJob!.properties);
+      jobProperties = JobProperty.splitString(selectedJob!.properties);
       return Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             _showSelectedJob(context),
-            _fillData(context),
+            _fillDevJobData(context),
           ]);
     }
   }
@@ -112,7 +73,7 @@ class _SetJobPageState extends State<SetJobPage> {
               color: Colors.black87,
               fontSize: 17,
               fontWeight: FontWeight.w600)),
-      Divider(color: Colors.grey),
+      Divider(color: Colors.grey, height: 2),
       Padding(
         padding: EdgeInsets.all(5),
         child: Text(selectedJob!.name, style: TextStyle(fontSize: 16)),
@@ -126,7 +87,7 @@ class _SetJobPageState extends State<SetJobPage> {
     ]);
   }
 
-  Widget _fillData(BuildContext context) {
+  Widget _fillDevJobData(BuildContext context) {
     return Form(
         key: _formKey,
         child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
@@ -138,7 +99,7 @@ class _SetJobPageState extends State<SetJobPage> {
           Divider(color: Colors.grey),
           ListView.builder(
               shrinkWrap: true,
-              itemCount: jobsProperties?.length ?? 0,
+              itemCount: jobProperties?.length ?? 0,
               itemBuilder: (BuildContext context, index) {
                 return Column(
                   children: [
@@ -146,10 +107,30 @@ class _SetJobPageState extends State<SetJobPage> {
                       children: [
                         new Flexible(
                           child: new TextFormField(
-                              //onChanged: (filledProperty) {
-                              //print('First text field: $filledProperty');
-                              //},
+                              //keyboardType: TextInputType.number,
                               controller: _controller,
+                              onFieldSubmitted: (text) {
+                                if (jobBody?[index].value != null) {
+                                  print('on change: ' + text);
+                                  jobBody?.add(new JobBody(
+                                      name: jobProperties![index].name,
+                                      value: text //_jobBodyValue
+                                      ));
+                                } else {
+                                  print('on else: ' + text);
+                                  jobBody?[index].value = text;
+                                }
+                                print(
+                                    'index: $index, name: ${jobBody![index].name}, val: ${jobBody![index].value}');
+                              },
+                              /*jobBody?.add(new JobBody(
+                                    name: jobProperties![index].name,
+                                    value: _jobBodyValue //_jobBodyValue
+                                    ));
+                                print(
+                                    'index: $index, name: ${jobBody![index].name}, val: ${jobBody![index].value}'); */
+
+                              textInputAction: TextInputAction.next,
                               cursorColor: Colors.grey,
                               decoration: new InputDecoration(
                                 fillColor: Colors.black26,
@@ -161,12 +142,12 @@ class _SetJobPageState extends State<SetJobPage> {
                                 border: new OutlineInputBorder(
                                     borderSide:
                                         new BorderSide(color: Colors.teal)),
-                                labelText: jobsProperties![index].name,
+                                labelText: jobProperties![index].name,
                                 labelStyle: TextStyle(color: Colors.black38),
                               ),
                               validator: (String? value) {
                                 if (value == null || value.isEmpty) {
-                                  return 'Please enter some text';
+                                  return 'Please enter some data';
                                 }
                                 return null;
                               }),
@@ -177,11 +158,12 @@ class _SetJobPageState extends State<SetJobPage> {
                   ],
                 );
               }),
-          _setDevJobButton(context)
+          SizedBox(height: 15),
+          _orderDevJobButton(context)
         ]));
   }
 
-  Widget _setDevJobButton(BuildContext context) {
+  Widget _orderDevJobButton(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.center, children: [
       ElevatedButton(
         style: ButtonStyle(
@@ -194,7 +176,9 @@ class _SetJobPageState extends State<SetJobPage> {
           if (_formKey.currentState!.validate()) {
             // Process data.
             setState(() {
-              newDeviceJob?.body = _controller.text;
+              _jobBodyValue = JobBody.changeListToString(jobBody!);
+              //_controller?.text ?? ''; //_jobBodyValue;
+              newDeviceJob?.body = _jobBodyValue;
               newDeviceJob?.executionTime = '2021-08-10T21:36:17.9426078';
               _futureDeviceJob = DeviceJobsRequests.postDeviceJob(
                   1, //GlobalData.globalDevice.id,
@@ -217,36 +201,17 @@ class _SetJobPageState extends State<SetJobPage> {
       future: _futureDeviceJob,
       builder: (context, snapshot) {
         if (snapshot.hasData) {
-          return Card(
-              elevation: 5,
-              child: ListTile(
-                title:
-                    Text('Summary' 'Summary', style: TextStyle(fontSize: 17)),
-                subtitle: Text(
-                    'The job has been successfully submitted for a device with ID: ' +
-                        '${GlobalData.globalDevice.id}' +
-                        ', with job body: ' +
-                        '${snapshot.data!.body}.',
-                    style:
-                        TextStyle(fontStyle: FontStyle.italic, fontSize: 16)),
-              ));
+          return CustomSummaryCard(
+              subtitleText:
+                  'Job has been successfully submitted for a device with ID: ' +
+                      '${GlobalData.globalDevice.id}' +
+                      ', with job body: ' +
+                      '${snapshot.data!.body}.');
         } else if (snapshot.hasError) {
-          return Card(
-              elevation: 5,
-              child: ListTile(
-                  title: Text('Summary', style: TextStyle(fontSize: 17)),
-                  subtitle: Text('${snapshot.error}',
-                      style: TextStyle(
-                          fontStyle: FontStyle.italic, fontSize: 16))));
+          return CustomSummaryCard(subtitleText: '${snapshot.error}');
         }
         return //const CircularProgressIndicator();
-            Card(
-                elevation: 5,
-                child: ListTile(
-                    title: Text('Summary', style: TextStyle(fontSize: 17)),
-                    subtitle: Text('No action was taken.',
-                        style: TextStyle(
-                            fontStyle: FontStyle.italic, fontSize: 16))));
+            CustomSummaryCard(subtitleText: 'No action was taken.');
       },
     );
   }
