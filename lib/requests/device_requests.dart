@@ -7,7 +7,7 @@ class DeviceRequests {
   static final String baseUrl = Config.ApiAddress + '/devices';
 
   static Future<List<ViewDeviceDto>> getDevices() async {
-    return await RequestsHelper.get<ViewDeviceDto>(
+    return await RequestsHelper.getReturnList<ViewDeviceDto>(
         baseUrl, (map) => ViewDeviceDto.fromMap(map));
   }
 }

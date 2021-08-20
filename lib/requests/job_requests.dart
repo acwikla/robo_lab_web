@@ -6,7 +6,7 @@ class JobRequests {
   static final String baseUrl = Config.ApiAddress + '/jobs';
 
   static Future<List<JobDto>> getJobsForDevType(String devTypeName) async {
-    return await RequestsHelper.get<JobDto>(
+    return await RequestsHelper.getReturnList<JobDto>(
         baseUrl + '?devtype=$devTypeName', (map) => JobDto.fromMap(map));
   }
 }
