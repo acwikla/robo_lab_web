@@ -32,7 +32,8 @@ class VerticalMenuItem extends StatelessWidget {
                 Visibility(
                   visible: menuController.isHovering(itemName) ||
                       menuController.isActive(itemName),
-                  child: Container(width: 3, height: 72, color: peachPuff),
+                  child: Container(
+                      width: 3, height: 72, color: Colors.white /*peachPuff*/),
                   maintainSize: true,
                   maintainState: true,
                   maintainAnimation: true,
@@ -51,14 +52,14 @@ class VerticalMenuItem extends StatelessWidget {
                           child: CustomText(
                         text: itemName,
                         color: menuController.isHovering(itemName)
-                            ? peachPuff
-                            : papayaWhip,
+                            ? Colors.white //peachPuff
+                            : Colors.grey, //papayaWhip,
                       ))
                     else
                       Flexible(
                           child: CustomText(
                               text: itemName,
-                              color: peachPuff,
+                              color: Colors.white, //peachPuff,
                               size: 17,
                               weight: FontWeight.bold))
                   ],

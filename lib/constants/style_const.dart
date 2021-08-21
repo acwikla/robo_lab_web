@@ -11,3 +11,6 @@ Color skyBlue = Color(0xFF87CEEB);
 Color steelBlue = Color(0xFF7496c2);
 Color darkSteelBlue = Color(0xFF2d436b);
 Color darkerSteelBlue = Color(0xFF05132e);
+
+Color leftMenuColor = Color(0xFF18485B);
+Color topPanelColor = Color(0xFF0E2A35);

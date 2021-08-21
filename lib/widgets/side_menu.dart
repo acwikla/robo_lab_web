@@ -14,7 +14,7 @@ class SideMenu extends StatelessWidget {
     //double _width = MediaQuery.of(context).size.width;
 
     return Container(
-      color: lightSteelBlue,
+      color: leftMenuColor, //lightSteelBlue,
       child: ListView(
         children: [
           Column(
@@ -26,7 +26,7 @@ class SideMenu extends StatelessWidget {
             ],
           ),
           Divider(
-            color: lightSteelBlue.withOpacity(.1),
+            color: /*lightSteelBlue*/ leftMenuColor.withOpacity(.1),
           ),
           Column(
               mainAxisSize: MainAxisSize.min,

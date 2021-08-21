@@ -11,7 +11,7 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
             //precision_manufacturing
             //toys_sharp
             child: Icon(Icons.precision_manufacturing_sharp,
-                color: papayaWhip, size: 35),
+                color: Colors.grey /*papayaWhip*/, size: 35),
           )
         ],
       ),
@@ -21,14 +21,15 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
           Visibility(
               child: CustomText(
                   text: "ROBOLab",
-                  color: papayaWhip,
+                  color: Colors.grey /*papayaWhip*/,
                   size: 20,
                   weight: FontWeight.bold)),
           Expanded(child: Container()),
           Stack(
             children: [
               IconButton(
-                  icon: Icon(Icons.notifications_none_sharp, color: papayaWhip),
+                  icon: Icon(Icons.notifications_none_sharp,
+                      color: Colors.grey /*papayaWhip*/),
                   onPressed: () {}),
               Positioned(
                   top: 7,
@@ -43,12 +44,13 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
           Container(
             width: 2,
             height: 22,
-            color: papayaWhip,
+            color: Colors.grey /*papayaWhip*/,
           ),
           SizedBox(
             width: 24,
           ),
-          CustomText(text: "Booo BoBoo", color: papayaWhip, size: 18),
+          CustomText(
+              text: "Booo BoBoo", color: Colors.grey /*papayaWhip*/, size: 18),
           SizedBox(
             width: 16,
           ),
@@ -60,16 +62,16 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
               //padding: EdgeInsets.all(2),
               margin: EdgeInsets.all(2),
               child: CircleAvatar(
-                backgroundColor: steelBlue,
+                backgroundColor: topPanelColor,
                 child: Icon(
                   Icons.person_outline,
-                  color: papayaWhip,
+                  color: Colors.grey /*papayaWhip*/,
                 ),
               ),
             ),
           )
         ],
       ),
-      iconTheme: IconThemeData(color: papayaWhip),
-      backgroundColor: steelBlue,
+      iconTheme: IconThemeData(color: Colors.grey /*papayaWhip*/),
+      backgroundColor: topPanelColor, //steelBlue,
     );
