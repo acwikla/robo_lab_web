@@ -2,7 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:robo_lab_web/constants/style_const.dart';
-import 'package:robo_lab_web/pages/get_devices.dart';
+import 'package:robo_lab_web/pages/devices_page.dart';
 import 'package:robo_lab_web/routing/routes.dart';
 
 class MenuController extends GetxController {

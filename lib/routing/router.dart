@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:robo_lab_web/pages/example_table_page.dart';
-import 'package:robo_lab_web/pages/get_devices.dart';
+import 'package:robo_lab_web/pages/devices_page.dart';
 import 'package:robo_lab_web/pages/home_page/home_page.dart';
 import 'package:robo_lab_web/pages/set_job/set_job_page.dart';
 import 'package:robo_lab_web/routing/routes.dart';

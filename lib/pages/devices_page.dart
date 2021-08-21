@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:robo_lab_web/dto/device_type_dto.dart';
 import 'package:robo_lab_web/dto/view_device_dto.dart';
+import 'package:robo_lab_web/global.dart';
 import 'package:robo_lab_web/requests/device_requests.dart';
 
 class DevicesPage extends StatefulWidget {
@@ -43,26 +44,33 @@ class _DevicesPageState extends State<DevicesPage> {
   }
 
   ListTile _buildItemsForListView(ViewDeviceDto dev) {
-    //return Text(dev.name);
     return ListTile(
       title: Text(dev.name, style: TextStyle(fontSize: 20)),
       subtitle:
           Text('Type: ' + dev.deviceType.name, style: TextStyle(fontSize: 16)),
-      leading: getIcon(dev.deviceType),
-      // onTap: () {
-      //   //Navigator.pushReplacementNamed(context, routes.deviceDetails);
-      //   Navigator.pushReplacementNamed(context, routes.deviceDetails,
-      //       arguments: dev);
-      // },
+      leading: _getIcon(dev.deviceType),
+      tileColor: dev.id == Global.device?.id ? Colors.grey[300] : Colors.white,
+      onTap: () {
+        setState(() {
+          Global.device = dev;
+          Global.deviceType = dev.deviceType;
+        });
+        //Navigator.pushReplacementNamed(context, routes.deviceDetails);
+      },
     );
   }
 
-  Widget getIcon(DeviceTypeDTO devType) {
-    if (devType.name == 'SmartTerra')
-      return Icon(Icons.panorama_horizontal, color: Colors.green);
-    else if (devType.name == 'RoboArm(Arexx RA-1-PRO)')
-      return Icon(Icons.auto_awesome_mosaic, color: Colors.blue);
-    else
-      return Icon(Icons.question_answer);
+  Widget _getIcon(DeviceTypeDTO devType) {
+    switch (devType.name) {
+      case 'SmartTerra':
+        return Icon(Icons.yard_outlined, color: Colors.green);
+      case 'RoboArm(Arexx RA-1-PRO)':
+      case 'Dobot Magician V2':
+        return Icon(Icons.precision_manufacturing_outlined, color: Colors.blue);
+      case 'Rihanna':
+        return Icon(Icons.device_thermostat, color: Colors.orange);
+      default:
+        return Icon(Icons.device_unknown);
+    }
   }
 }

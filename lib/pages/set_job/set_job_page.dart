@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:robo_lab_web/constants/style_const.dart';
 import 'package:robo_lab_web/dto/device_job_dto.dart';
 import 'package:robo_lab_web/dto/job_dto.dart';
-import 'package:robo_lab_web/global_data.dart';
+import 'package:robo_lab_web/global.dart';
 import 'package:robo_lab_web/gui.dart';
 import 'package:robo_lab_web/patterns/custom_summary_cadr.dart';
 import 'package:robo_lab_web/patterns/custom_text.dart';
@@ -33,7 +33,7 @@ class _SetJobPageState extends State<SetJobPage> {
   @override
   void initState() {
     super.initState();
-    _viewJobs = JobRequests.getJobsForDevType(GlobalData.globalDeviceType.name);
+    _viewJobs = JobRequests.getJobsForDevType(Global.deviceType.name);
   }
 
   @override
@@ -174,7 +174,7 @@ class _SetJobPageState extends State<SetJobPage> {
           return CustomSummaryCard(
               subtitleText:
                   'Job has been successfully submitted for a device with ID: ' +
-                      '${GlobalData.globalDevice.id}' +
+                      '${Global.device.id}' +
                       ', with job body: ' +
                       '${snapshot.data!.body}.');
         } else if (snapshot.hasError) {
