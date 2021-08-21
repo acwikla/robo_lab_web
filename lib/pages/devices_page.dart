@@ -4,6 +4,8 @@ import 'package:robo_lab_web/dto/view_device_dto.dart';
 import 'package:robo_lab_web/global.dart';
 import 'package:robo_lab_web/requests/device_requests.dart';
 
+import '../gui.dart';
+
 class DevicesPage extends StatefulWidget {
   @override
   _DevicesPageState createState() => _DevicesPageState();
@@ -20,7 +22,13 @@ class _DevicesPageState extends State<DevicesPage> {
 
   @override
   Widget build(BuildContext context) {
-    return _buildListView(context);
+    return Container(
+        width: 3,
+        child: ListView(padding: new EdgeInsets.all(10.0), children: [
+          Text('Select active device', style: Gui.textStylePageTitle),
+          SizedBox(height: 30),
+          _buildListView(context)
+        ]));
   }
 
   Widget _buildListView(BuildContext context) {
@@ -31,6 +39,7 @@ class _DevicesPageState extends State<DevicesPage> {
           return Center(child: CircularProgressIndicator());
         } else {
           return ListView.builder(
+              shrinkWrap: true,
               itemCount: snapshot.data?.length ?? 0,
               itemBuilder: (context, index) {
                 return Card(

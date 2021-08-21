@@ -25,7 +25,6 @@ class _SetJobPageState extends State<SetJobPage> {
   var _jobBody = new JobBody();
   String _jobBodyValue = '';
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  //TextEditingController? _controller; // = TextEditingController();
 
   DeviceJobDto? newDeviceJob = new DeviceJobDto();
   Future<DeviceJobDto>? _futureDeviceJob;
