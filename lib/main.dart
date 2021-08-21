@@ -23,7 +23,7 @@ class MyApp extends StatelessWidget {
         debugShowCheckedModeBanner: false,
         title: "ROBOLab",
         theme: ThemeData(
-          scaffoldBackgroundColor: floralWhite,
+          scaffoldBackgroundColor: Colors.white, //floralWhite,
           textTheme: GoogleFonts.ptSansTextTheme(Theme.of(context).textTheme)
               .apply(bodyColor: Colors.black),
           pageTransitionsTheme: PageTransitionsTheme(builders: {
