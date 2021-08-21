@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:robo_lab_web/constants/style_const.dart';
+import 'package:robo_lab_web/pages/get_devices.dart';
 import 'package:robo_lab_web/routing/routes.dart';
 
 class MenuController extends GetxController {
@@ -24,13 +25,15 @@ class MenuController extends GetxController {
   Widget returnIconFor(String itemName) {
     switch (itemName) {
       case homePageRoute:
-        //home_filled
-        //roofing_sharp
         return _customIcon(Icons.home_outlined, itemName);
+      case devicesPageRoute:
+        return _customIcon(Icons.precision_manufacturing, itemName);
       case setJobPageRoute:
-        //auto_fix_high
-        //assignment_outlined
-        return _customIcon(Icons.assignment_outlined, itemName);
+        return _customIcon(Icons.play_circle, itemName);
+      case deviceCompletedJobsPageRoute:
+        return _customIcon(Icons.check_box_outlined, itemName);
+      case devicePendingsJobsPageRoute:
+        return _customIcon(Icons.pending_actions, itemName);
       case devicePropertiesPageRoute:
         //filter_vintage_outlined
         //grass_sharp

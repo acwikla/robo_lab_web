@@ -11,7 +11,7 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     //return _getPageRoute(HomePage());
     case setJobPageRoute:
       return _getPageRoute(SetJobPage());
-    case devices:
+    case devicesPageRoute:
       return _getPageRoute(DevicesPage());
     case exampleTable:
       return _getPageRoute(ExampleTablePage());
