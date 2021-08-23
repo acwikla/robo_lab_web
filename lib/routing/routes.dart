@@ -14,8 +14,8 @@ List sideMenuItems = [
   setJobPageRoute,
   deviceCompletedJobsPageRoute,
   devicePendingsJobsPageRoute,
-  devicePropertiesPageRoute,
+  //devicePropertiesPageRoute,
   diagramsPageRoute,
-  exampleTable,
+  //exampleTable,
   authenticationPageRoute,
 ];

@@ -1,5 +1,6 @@
 import 'package:robo_lab_web/dto/device_type_dto.dart';
 import 'package:robo_lab_web/dto/view_device_dto.dart';
+import 'package:robo_lab_web/dto/view_device_job_dto.dart';
 import 'package:robo_lab_web/dto/view_user_dto.dart';
 
 class Global {
@@ -14,4 +15,12 @@ class Global {
       name: 'Dobot Magician V2 (RoboArm)',
       deviceType: deviceType,
       user: user);
+
+  static ViewDeviceJobDto deviceJob = ViewDeviceJobDto(
+      id: 1,
+      deviceId: 2,
+      jobId: 2,
+      createdDate: "createdDate",
+      executionTime: "executionTime",
+      body: "body");
 }
