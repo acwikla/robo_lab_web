@@ -39,6 +39,19 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
 
   @override
   Widget build(BuildContext context) {
+    return Row(
+      children: [
+        Expanded(flex: 2, child: _buildJobPropertiesTable(context)),
+        Expanded(flex: 3, child: _buildJobValueChart(context))
+      ],
+    );
+  }
+
+  Widget _buildJobPropertiesTable(BuildContext context) {
+    return Container(child: Text('tu bedzie tabelka'));
+  }
+
+  Widget _buildJobValueChart(BuildContext context) {
     return FutureBuilder<List<ViewDeviceValueDto>>(
         future: _deviceJobValues,
         builder: (context, snapshot) {
@@ -49,15 +62,17 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
                 title: ChartTitle(
                   text: 'Results of the completed job: ${Global.deviceJob.id}',
                   alignment: ChartAlignment.center, //?
-                  textStyle: Gui.textStylePageTitle,
+                  textStyle: TextStyle(
+                      color: darkerSteelBlue,
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold),
                 ),
                 margin: EdgeInsets.all(40),
                 //palette
                 plotAreaBackgroundColor: superLightBlueGrey,
                 legend: Legend(
                     isVisible: true,
-
-                    //position: LegendPosition.bottom,
+                    position: LegendPosition.top,
                     //offset: Offset(40, 40),
                     //overflowMode: LegendItemOverflowMode.wrap,
                     title: LegendTitle(
@@ -93,7 +108,7 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
                   dateFormat: DateFormat.Hms(),
                   labelStyle: TextStyle(color: Colors.black87, fontSize: 13),
                   //rangePadding: ,
-                  axisLine: AxisLine(color: leftMenuColor),
+                  axisLine: AxisLine(color: lightBlueGrey),
                   title: AxisTitle(
                       text: 'Time',
                       textStyle: TextStyle(
@@ -102,7 +117,7 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
                           fontWeight: FontWeight.bold)),
                 ),
                 primaryYAxis: NumericAxis(
-                    axisLine: AxisLine(color: leftMenuColor),
+                    axisLine: AxisLine(color: lightBlueGrey),
                     //decimalPlaces: 4,
                     labelFormat: '{value}',
                     labelStyle:
