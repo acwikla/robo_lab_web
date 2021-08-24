@@ -63,9 +63,10 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
                   text: 'Results of the completed job: ${Global.deviceJob.id}',
                   alignment: ChartAlignment.far, //?
                   textStyle: TextStyle(
-                      color: darkerSteelBlue,
-                      fontSize: 15,
-                      fontWeight: FontWeight.bold),
+                    color: darkerSteelBlue,
+                    fontSize: 15,
+                    fontWeight: FontWeight.bold,
+                  ),
                 ),
                 margin: EdgeInsets.fromLTRB(5, 40, 10, 40),
                 //palette
