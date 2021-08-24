@@ -15,5 +15,5 @@ Color darkerSteelBlue = Color(0xFF05132e);
 
 Color leftMenuColor = Color(0xFF18485B);
 Color topPanelColor = Color(0xFF0E2A35);
-Color backgroundChartColor = Color(0xFFf5f9fa);
+Color superLightBlueGrey = Color(0xFFf5f9fa);
 Color lightBlueGrey = Color(0xFF7da1ab);

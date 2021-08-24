@@ -27,11 +27,13 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
     _deviceJobValues =
         DeviceJobsRequests.getDeviceJobValues(Global.deviceJob.id);
     _tooltipBehavior = TooltipBehavior(
-        enable: true,
-        duration: 5,
-        color: topPanelColor,
-        elevation: 10,
-        shadowColor: topPanelColor);
+      enable: true,
+      duration: 5,
+      color: lightBlueGrey,
+      elevation: 10,
+      shadowColor: topPanelColor,
+      //tooltipPosition: TooltipPosition.pointer
+    );
     super.initState();
   }
 
@@ -51,24 +53,27 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
                 ),
                 margin: EdgeInsets.all(40),
                 //palette
-                plotAreaBackgroundColor: backgroundChartColor,
+                plotAreaBackgroundColor: superLightBlueGrey,
                 legend: Legend(
                     isVisible: true,
+
                     //position: LegendPosition.bottom,
                     //offset: Offset(40, 40),
                     //overflowMode: LegendItemOverflowMode.wrap,
                     title: LegendTitle(
                         text: 'Data',
                         textStyle: TextStyle(
-                          color: Colors.blueGrey[800],
+                          color: Colors.black87,
+                          fontWeight: FontWeight.bold,
                           fontSize: 15,
                         ))),
                 tooltipBehavior: _tooltipBehavior,
+                plotAreaBorderColor: Colors.transparent,
                 series: <ChartSeries>[
                   LineSeries<ViewDeviceValueDto, DateTime>(
                       width: 2,
                       name: snapshot.data?[0].propertyName,
-                      color: darkSteelBlue,
+                      color: leftMenuColor,
                       dataSource: snapshot.data ?? [],
                       xValueMapper: (ViewDeviceValueDto deviceValueDto, _) =>
                           deviceValueDto.dateTime,
@@ -78,26 +83,30 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
                           textStyle: TextStyle(
                               fontFamily: GoogleFonts.ptSansTextTheme
                                   .toString(), //'Roboto',
-                              fontSize: 12,
+                              fontSize: 14,
                               color: Colors.blueGrey[800]),
                           isVisible: true),
-                      enableTooltip: true)
+                      enableTooltip: true),
                 ],
                 primaryXAxis: DateTimeAxis(
                   edgeLabelPlacement: EdgeLabelPlacement.shift,
                   dateFormat: DateFormat.Hms(),
+                  labelStyle: TextStyle(color: Colors.black87, fontSize: 13),
                   //rangePadding: ,
+                  axisLine: AxisLine(color: leftMenuColor),
                   title: AxisTitle(
                       text: 'Time',
                       textStyle: TextStyle(
-                        color: Colors.grey.shade700,
-                        fontSize: 16,
-                      )),
+                          color: Colors.grey.shade700,
+                          fontSize: 16,
+                          fontWeight: FontWeight.bold)),
                 ),
                 primaryYAxis: NumericAxis(
-                  //decimalPlaces: 4,
-                  labelFormat: '{value}',
-                ));
+                    axisLine: AxisLine(color: leftMenuColor),
+                    //decimalPlaces: 4,
+                    labelFormat: '{value}',
+                    labelStyle:
+                        TextStyle(color: Colors.black87, fontSize: 13)));
           }
         });
   }
