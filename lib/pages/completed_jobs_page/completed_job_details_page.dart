@@ -67,7 +67,7 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
                       fontSize: 15,
                       fontWeight: FontWeight.bold),
                 ),
-                margin: EdgeInsets.all(40),
+                margin: EdgeInsets.fromLTRB(5, 40, 10, 40),
                 //palette
                 plotAreaBackgroundColor: superLightBlueGrey,
                 legend: Legend(

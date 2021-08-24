@@ -30,7 +30,7 @@ class CustomSummaryCard extends StatelessWidget {
         elevation: elevation ?? 5,
         child: ListTile(
             leading: icon ??
-                Icon(Icons.message_outlined, color: lightSteelBlue, size: 25),
+                Icon(Icons.message_outlined, color: peachPuff, size: 25),
             title: Text(titleText ?? 'Summary',
                 style: TextStyle(
                     fontStyle: fontSubtitleStyle ?? FontStyle.normal,

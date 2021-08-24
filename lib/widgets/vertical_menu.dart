@@ -60,7 +60,7 @@ class VerticalMenuItem extends StatelessWidget {
                           child: CustomText(
                               text: itemName,
                               color: Colors.white, //peachPuff,
-                              size: 17,
+                              size: 16,
                               weight: FontWeight.bold))
                   ],
                 )))

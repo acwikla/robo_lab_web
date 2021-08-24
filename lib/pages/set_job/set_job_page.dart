@@ -158,7 +158,13 @@ class _SetJobPageState extends State<SetJobPage> {
             print(newDeviceJob!.executionTime);
           }
         },
-        child: const Text('Submit'),
+        child: const Text(
+          'Submit',
+          style: TextStyle(
+              color: Colors.white,
+              fontWeight: FontWeight.bold,
+              letterSpacing: 1),
+        ),
       ),
       SizedBox(height: 15),
       _returnRequestMessage(context),

@@ -14,9 +14,38 @@ class SideMenu extends StatelessWidget {
     //double _width = MediaQuery.of(context).size.width;
 
     return Container(
-      color: leftMenuColor, //lightSteelBlue,
+      decoration: BoxDecoration(
+        boxShadow: [
+          //BoxShadow(
+          //blurRadius: 8.0, color: Colors.black, offset: Offset(0, -16)),
+          BoxShadow(
+              blurRadius: 6.0,
+              color: Colors.grey.shade700,
+              offset: Offset(0, 10)),
+        ],
+        border: Border(
+          top: BorderSide(
+            color: leftMenuColor.withOpacity(.6),
+            width: 1.5,
+          ),
+        ),
+        gradient: LinearGradient(
+          begin: Alignment.topCenter,
+          end: Alignment.bottomCenter,
+          stops: [0.1, 0.5, 0.8, 0.9],
+          colors: [
+            topPanelColor,
+            leftMenuColor,
+            lighterleftMenuColor,
+            lightBlueGrey
+          ],
+        ),
+      ),
       child: ListView(
         children: [
+          //Divider(
+          //color: /*lightSteelBlue*/ leftMenuColor.withOpacity(.9),
+          //),
           Column(
             mainAxisSize: MainAxisSize.min,
             children: [
@@ -24,9 +53,6 @@ class SideMenu extends StatelessWidget {
                 height: 15,
               ),
             ],
-          ),
-          Divider(
-            color: /*lightSteelBlue*/ leftMenuColor.withOpacity(.1),
           ),
           Column(
               mainAxisSize: MainAxisSize.min,

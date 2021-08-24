@@ -11,9 +11,10 @@ class Gui {
       color: Colors.black87, fontSize: 17, fontWeight: FontWeight.w600);
 
   static final buttonStyleSubmit = ButtonStyle(
+      shadowColor: MaterialStateProperty.all(Colors.grey),
       elevation: MaterialStateProperty.all(5),
-      backgroundColor: MaterialStateProperty.all(darkSteelBlue),
-      overlayColor: MaterialStateProperty.all(lightSteelBlue));
+      backgroundColor: MaterialStateProperty.all(lightBlueGrey),
+      overlayColor: MaterialStateProperty.all(peachPuff));
 
   static InputDecoration inputDecoration(String? labelText) {
     return InputDecoration(

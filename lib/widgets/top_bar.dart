@@ -15,7 +15,7 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
           )
         ],
       ),
-      elevation: 0,
+      elevation: 10,
       title: Row(
         children: [
           Visibility(
