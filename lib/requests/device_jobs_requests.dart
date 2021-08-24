@@ -1,12 +1,20 @@
 import 'dart:convert';
 
 import 'package:robo_lab_web/dto/device_job_dto.dart';
+import 'package:robo_lab_web/dto/view_device_job_dto.dart';
+import 'package:robo_lab_web/dto/view_device_value_dto.dart';
 import '../config.dart';
 import 'requests_helper.dart';
 import 'package:http/http.dart' as http;
 
 class DeviceJobsRequests {
   static final String baseUrl = Config.ApiAddress + '/device-jobs​';
+
+  static Future<List<ViewDeviceValueDto>> getDeviceJobValues(int id) async {
+    return await RequestsHelper.getReturnList<ViewDeviceValueDto>(
+        'http://51.158.163.165/api/device-jobs/$id/get-all-job-values',
+        (map) => ViewDeviceValueDto.fromMap(map));
+  }
 
   static Future<DeviceJobDto> postDeviceJob(
       int deviceId, int jobId, DeviceJobDto devJob) async {

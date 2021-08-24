@@ -17,10 +17,10 @@ class Global {
       user: user);
 
   static ViewDeviceJobDto deviceJob = ViewDeviceJobDto(
-      id: 1,
-      deviceId: 2,
-      jobId: 2,
-      createdDate: "createdDate",
-      executionTime: "executionTime",
-      body: "body");
+      id: 62,
+      deviceId: 120,
+      jobId: 120,
+      createdDate: "0001-01-01T00:00:00",
+      executionTime: "2021-08-24T04:23:47.331Z",
+      body: "example body");
 }

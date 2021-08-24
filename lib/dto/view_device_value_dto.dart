@@ -28,7 +28,7 @@ class ViewDeviceValueDto {
       ViewDeviceValueDto(
         id: json["id"],
         value: json["val"],
-        dateTime: json["dateTime"],
+        dateTime: DateTime.parse(json["dateTime"]),
         propertyId: json["propertyId"],
         //do zmiany jak zmienie klase: ViewDeviceValueDTO(Api)
         propertyName: json["property"]["name"],
