@@ -61,7 +61,7 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
             return SfCartesianChart(
                 title: ChartTitle(
                   text: 'Results of the completed job: ${Global.deviceJob.id}',
-                  alignment: ChartAlignment.center, //?
+                  alignment: ChartAlignment.far, //?
                   textStyle: TextStyle(
                       color: darkerSteelBlue,
                       fontSize: 15,
@@ -73,6 +73,9 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
                 legend: Legend(
                     isVisible: true,
                     position: LegendPosition.top,
+                    alignment: ChartAlignment.center,
+                    //borderColor: lighterPeachPuff,
+                    //borderWidth: 2,
                     //offset: Offset(40, 40),
                     //overflowMode: LegendItemOverflowMode.wrap,
                     title: LegendTitle(
