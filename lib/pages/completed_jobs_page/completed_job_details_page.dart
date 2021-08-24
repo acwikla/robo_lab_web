@@ -46,7 +46,7 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
             return SfCartesianChart(
                 title: ChartTitle(
                   text: 'Results of the completed job: ${Global.deviceJob.id}',
-                  alignment: ChartAlignment.near, //?
+                  alignment: ChartAlignment.center, //?
                   textStyle: Gui.textStylePageTitle,
                 ),
                 margin: EdgeInsets.all(40),
@@ -66,6 +66,7 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
                 tooltipBehavior: _tooltipBehavior,
                 series: <ChartSeries>[
                   LineSeries<ViewDeviceValueDto, DateTime>(
+                      width: 2,
                       name: snapshot.data?[0].propertyName,
                       color: darkSteelBlue,
                       dataSource: snapshot.data ?? [],
