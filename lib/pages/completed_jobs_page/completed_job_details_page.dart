@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:google_fonts/google_fonts.dart';
+import 'package:robo_lab_web/constants/style_const.dart';
 import 'package:robo_lab_web/dto/view_device_value_dto.dart';
 import 'package:robo_lab_web/global.dart';
+import 'package:robo_lab_web/gui.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
 
@@ -40,36 +43,75 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
 
   @override
   void initState() {
-    _tooltipBehavior = TooltipBehavior(enable: true, canShowMarker: true);
+    _tooltipBehavior = TooltipBehavior(
+        enable: true,
+        duration: 5,
+        color: topPanelColor,
+        elevation: 10,
+        shadowColor: topPanelColor);
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
     return SfCartesianChart(
-      title: ChartTitle(
-          text: 'Results of the completed job: ${Global.deviceJob.id}'),
-      legend: Legend(isVisible: true),
-      tooltipBehavior: _tooltipBehavior,
-      series: <ChartSeries>[
-        LineSeries<ViewDeviceValueDto, double>(
-            name: _deviceJobValue[0].propertyName,
-            dataSource: _deviceJobValue,
-            xValueMapper: (ViewDeviceValueDto deviceValueDto, _) =>
-                deviceValueDto.dateTime.second.toDouble(),
-            yValueMapper: (ViewDeviceValueDto deviceValueDto, _) =>
-                double.parse(deviceValueDto.value),
-            dataLabelSettings: DataLabelSettings(isVisible: true),
-            enableTooltip: true)
-      ],
-      primaryXAxis: NumericAxis(
-        edgeLabelPlacement: EdgeLabelPlacement.shift,
-      ),
-      primaryYAxis: NumericAxis(
-        //edgeLabelPlacement: EdgeLabelPlacement.shift,
-        labelFormat: '{value}',
-        //numberFormat: NumberFormat.simpleCurrency(decimalDigits: 0)
-      ),
-    );
+        title: ChartTitle(
+          text: 'Results of the completed job: ${Global.deviceJob.id}',
+          alignment: ChartAlignment.near, //?
+          textStyle: Gui.textStylePageTitle,
+        ),
+        margin: EdgeInsets.all(40),
+        //palette
+        //zoomPanBehavior
+        //enableMultiSelection
+        plotAreaBackgroundColor: backgroundChartColor, //lighterPeachPuff,
+        legend: Legend(
+            isVisible: true,
+            //borderColor: lightBlueGrey,
+            //borderWidth: 1,
+            //position: LegendPosition.bottom,
+            //offset: Offset(40, 40),
+            //overflowMode: LegendItemOverflowMode.wrap,
+            //isResponsive: true,
+            title: LegendTitle(
+                text: 'Data',
+                textStyle: TextStyle(
+                  color: Colors.blueGrey[800],
+                  fontSize: 15,
+                ))),
+        tooltipBehavior: _tooltipBehavior,
+        series: <ChartSeries>[
+          LineSeries<ViewDeviceValueDto, DateTime>(
+              name: _deviceJobValue[0].propertyName,
+              color: darkSteelBlue,
+              dataSource: _deviceJobValue,
+              xValueMapper: (ViewDeviceValueDto deviceValueDto, _) =>
+                  deviceValueDto.dateTime,
+              yValueMapper: (ViewDeviceValueDto deviceValueDto, _) =>
+                  double.parse(deviceValueDto.value),
+              dataLabelSettings: DataLabelSettings(
+                  textStyle: TextStyle(
+                      fontFamily:
+                          GoogleFonts.ptSansTextTheme.toString(), //'Roboto',
+                      fontSize: 12,
+                      color: Colors.blueGrey[800]),
+                  isVisible: true),
+              enableTooltip: true)
+        ],
+        primaryXAxis: DateTimeAxis(
+          edgeLabelPlacement: EdgeLabelPlacement.shift,
+          dateFormat: DateFormat.Hms(),
+          //rangePadding: ,
+          title: AxisTitle(
+              text: 'Time',
+              textStyle: TextStyle(
+                color: Colors.grey.shade700,
+                fontSize: 16,
+              )),
+        ),
+        primaryYAxis: NumericAxis(
+          //decimalPlaces: 4,
+          labelFormat: '{value}',
+        ));
   }
 }
