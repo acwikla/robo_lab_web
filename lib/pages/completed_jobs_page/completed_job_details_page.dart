@@ -66,6 +66,9 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
         .forEach((f) => deviceValueAllPropertyNames.add(f.propertyName));
     jobPropertyName =
         new Set<String>.from(deviceValueAllPropertyNames).toList();
+    if (jobPropertyName.isEmpty) {
+      jobPropertyName.add('Job has no value to view.');
+    }
     jobPropertyName.forEach((f) => print("result: $f"));
     _deviceJobValues
         .where((element) => element.propertyName == _selectedProperty)
@@ -75,7 +78,7 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
 
     return Container(
         alignment: Alignment.topLeft,
-        padding: EdgeInsets.fromLTRB(5, 40, 10, 40),
+        padding: EdgeInsets.fromLTRB(10, 40, 30, 40),
         child: ListView(
           children: [
             Text(
@@ -87,60 +90,70 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
                 fontWeight: FontWeight.bold,
               ),
             ),
-            for (int i = 0; i <= jobPropertyName.length - 1; i++)
-              ListTile(
-                contentPadding: EdgeInsets.fromLTRB(0, 20, 0, 0),
-                title:
-                    Text('${jobPropertyName[i]}', style: Gui.textStyleCasual),
-                selected: false,
-                leading: Radio(
-                  value: jobPropertyName[i],
-                  groupValue: _selectedProperty,
-                  activeColor: peachPuff, //lightBlueGrey,
-                  focusColor: Colors.grey,
-                  onChanged: (String? value) {
-                    setState(() {
-                      _selectedProperty = value!;
-                      print('new');
-                      print(_selectedProperty);
-                      _propertyValue.clear();
-                    });
-                  },
+            SizedBox(height: 15),
+            Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(
+                    color: lightBlueGrey.withOpacity(.6),
+                    width: 1.5,
+                  ),
+                  bottom: BorderSide(
+                    color: lightBlueGrey.withOpacity(.6),
+                    width: 1.5,
+                  ),
                 ),
               ),
-            /*
-          RadioListTile<String>(
-                title:
-                    Text('${jobPropertyName[i]}', style: Gui.textStyleCasual),
-                value: jobPropertyName[i],
-                activeColor: peachPuff,
-                groupValue: _selectedProperty,
-                onChanged: (String? value) {
-                  setState(() {
-                    _selectedProperty = value!;
-                    print('new');
-                    print(_selectedProperty);
-                    _propertyValue.clear();
-                  });
+              child: ListView.builder(
+                shrinkWrap: true,
+                padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                itemCount: jobPropertyName.length ?? 0,
+                itemBuilder: (context, index) {
+                  return ListTile(
+                    title: Text('${jobPropertyName[index]}',
+                        style: Gui.textStyleCasual),
+                    selected: false,
+                    leading: Radio(
+                      value: jobPropertyName[index],
+                      groupValue: _selectedProperty,
+                      activeColor: peachPuff, //lightBlueGrey,
+                      focusColor: Colors.grey,
+                      onChanged: (String? value) {
+                        setState(() {
+                          _selectedProperty = value!;
+                          print('new');
+                          print(_selectedProperty);
+                          _propertyValue.clear();
+                        });
+                      },
+                    ),
+                  );
                 },
               ),
-        */
+            )
           ],
         ));
   }
 
   Widget _buildJobValueChart(BuildContext context) {
     return SfCartesianChart(
+        backgroundColor: Colors.transparent,
         title: ChartTitle(
           text: 'Results of the completed job: ${Global.deviceJob.id}',
-          alignment: ChartAlignment.far, //?
+          alignment: ChartAlignment.far,
+          borderColor: Colors.transparent,
+          backgroundColor: Colors.transparent,
           textStyle: TextStyle(
             color: darkerSteelBlue,
             fontSize: 15,
             fontWeight: FontWeight.bold,
+            decoration: TextDecoration.underline,
+            decorationColor: lightBlueGrey,
+            decorationThickness: 2,
+            decorationStyle: TextDecorationStyle.solid,
           ),
         ),
-        margin: EdgeInsets.fromLTRB(5, 40, 10, 40),
+        margin: EdgeInsets.fromLTRB(10, 40, 10, 40),
         //palette
         plotAreaBackgroundColor: superLightBlueGrey,
         legend: Legend(
@@ -154,7 +167,7 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
             title: LegendTitle(
                 text: 'Data',
                 textStyle: TextStyle(
-                  color: Colors.black87,
+                  color: darkerSteelBlue,
                   fontWeight: FontWeight.bold,
                   fontSize: 15,
                 ))),
@@ -189,7 +202,7 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
               text: 'Time',
               textStyle: TextStyle(
                   color: Colors.grey.shade700,
-                  fontSize: 16,
+                  fontSize: 15,
                   fontWeight: FontWeight.bold)),
         ),
         primaryYAxis: NumericAxis(
@@ -204,74 +217,7 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
           if (snapshot.hasData == false) {
             return Center(child: CircularProgressIndicator(color: skyBlue));
           } else {
-            return SfCartesianChart(
-                title: ChartTitle(
-                  text: 'Results of the completed job: ${Global.deviceJob.id}',
-                  alignment: ChartAlignment.far, //?
-                  textStyle: TextStyle(
-                    color: darkerSteelBlue,
-                    fontSize: 15,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-                margin: EdgeInsets.fromLTRB(5, 40, 10, 40),
-                //palette
-                plotAreaBackgroundColor: superLightBlueGrey,
-                legend: Legend(
-                    isVisible: true,
-                    position: LegendPosition.top,
-                    alignment: ChartAlignment.center,
-                    //borderColor: lighterPeachPuff,
-                    //borderWidth: 2,
-                    //offset: Offset(40, 40),
-                    //overflowMode: LegendItemOverflowMode.wrap,
-                    title: LegendTitle(
-                        text: 'Data',
-                        textStyle: TextStyle(
-                          color: Colors.black87,
-                          fontWeight: FontWeight.bold,
-                          fontSize: 15,
-                        ))),
-                tooltipBehavior: _tooltipBehavior,
-                plotAreaBorderColor: Colors.transparent,
-                series: <ChartSeries>[
-                  LineSeries<ViewDeviceValueDto, DateTime>(
-                      width: 2,
-                      name: snapshot.data?[0].propertyName,
-                      color: leftMenuColor,
-                      dataSource: snapshot.data ?? [],
-                      xValueMapper: (ViewDeviceValueDto deviceValueDto, _) =>
-                          deviceValueDto.dateTime,
-                      yValueMapper: (ViewDeviceValueDto deviceValueDto, _) =>
-                          double.parse(deviceValueDto.value),
-                      dataLabelSettings: DataLabelSettings(
-                          textStyle: TextStyle(
-                              fontFamily: GoogleFonts.ptSansTextTheme
-                                  .toString(), //'Roboto',
-                              fontSize: 14,
-                              color: Colors.blueGrey[800]),
-                          isVisible: true),
-                      enableTooltip: true),
-                ],
-                primaryXAxis: DateTimeAxis(
-                  edgeLabelPlacement: EdgeLabelPlacement.shift,
-                  dateFormat: DateFormat.Hms(),
-                  labelStyle: TextStyle(color: Colors.black87, fontSize: 13),
-                  //rangePadding: ,
-                  axisLine: AxisLine(color: lightBlueGrey),
-                  title: AxisTitle(
-                      text: 'Time',
-                      textStyle: TextStyle(
-                          color: Colors.grey.shade700,
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold)),
-                ),
-                primaryYAxis: NumericAxis(
-                    axisLine: AxisLine(color: lightBlueGrey),
-                    //decimalPlaces: 4,
-                    labelFormat: '{value}',
-                    labelStyle:
-                        TextStyle(color: Colors.black87, fontSize: 13)));
+            return SfCartesianChart([...]);
           }
         });*/
   }
