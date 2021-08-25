@@ -10,6 +10,9 @@ class Gui {
   static final textStyleParagraph = TextStyle(
       color: Colors.black87, fontSize: 17, fontWeight: FontWeight.w600);
 
+  static final textStyleCasual = TextStyle(
+      color: Colors.black87, fontSize: 15, fontWeight: FontWeight.normal);
+
   static final buttonStyleSubmit = ButtonStyle(
       shadowColor: MaterialStateProperty.all(Colors.grey),
       elevation: MaterialStateProperty.all(5),
