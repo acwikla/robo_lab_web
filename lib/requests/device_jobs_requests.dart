@@ -8,7 +8,7 @@ import 'requests_helper.dart';
 import 'package:http/http.dart' as http;
 
 class DeviceJobsRequests {
-  static final String baseUrl = Config.ApiAddress + '/device-jobs​';
+  static final String _baseUrl = Config.ApiAddress + '/device-jobs';
 
   static Future<List<ViewDeviceValueDto>> getDeviceJobValues(int id) async {
     return await RequestsHelper.getReturnList<ViewDeviceValueDto>(
@@ -16,6 +16,7 @@ class DeviceJobsRequests {
         (map) => ViewDeviceValueDto.fromMap(map));
   }
 
+  // create new device job for device
   static Future<DeviceJobDto> postDeviceJob(
       int deviceId, int jobId, DeviceJobDto devJob) async {
     final response = await http.post(
@@ -40,5 +41,12 @@ class DeviceJobsRequests {
       // then throw an exception.
       throw Exception('Failed to submit job.');
     }
+  }
+
+  // get all device jobs for specific device
+  static Future<List<ViewDeviceJobDto>> getDeviceJobsForDevice(
+      int deviceId) async {
+    return await RequestsHelper.getReturnList<ViewDeviceJobDto>(
+        _baseUrl + '/device/$deviceId', (map) => ViewDeviceJobDto.fromMap(map));
   }
 }

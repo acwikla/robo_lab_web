@@ -1,4 +1,5 @@
 import 'package:robo_lab_web/dto/device_type_dto.dart';
+import 'package:robo_lab_web/dto/job_dto.dart';
 import 'package:robo_lab_web/dto/view_device_dto.dart';
 import 'package:robo_lab_web/dto/view_device_job_dto.dart';
 import 'package:robo_lab_web/dto/view_user_dto.dart';
@@ -19,8 +20,14 @@ class Global {
   static ViewDeviceJobDto deviceJob = ViewDeviceJobDto(
       id: 62,
       deviceId: 120,
-      jobId: 120,
-      createdDate: "0001-01-01T00:00:00",
-      executionTime: "2021-08-24T04:23:47.331Z",
+      done: false,
+      job: JobDto(
+          description: "",
+          deviceTypeName: "",
+          id: 120,
+          name: "",
+          properties: ""),
+      // createdDate: "0001-01-01T00:00:00",
+      // executionTime: "2021-08-24T04:23:47.331Z",
       body: "example body");
 }

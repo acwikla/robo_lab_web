@@ -1,20 +1,28 @@
 import 'dart:convert';
 
+import 'job_dto.dart';
+
 class ViewDeviceJobDto {
   ViewDeviceJobDto(
       {required this.id,
       required this.deviceId,
-      required this.jobId,
-      required this.createdDate,
-      required this.executionTime,
-      required this.body});
+      required this.done,
+      //required this.jobId,
+      //required this.createdDate,
+      //required this.executionTime,
+      required this.body,
+      required this.job});
 
   int id;
   int deviceId;
-  int jobId;
-  String createdDate;
-  String executionTime;
+  bool done;
+  //String createdDate;
+  //String executionTime;
   String body;
+  JobDto job;
+
+  factory ViewDeviceJobDto.fromJson(String str) =>
+      ViewDeviceJobDto.fromMap(json.decode(str));
 
   String toJson() => json.encode(toMap());
 
@@ -22,21 +30,19 @@ class ViewDeviceJobDto {
       ViewDeviceJobDto(
           id: json["id"],
           deviceId: json["deviceId"],
-          jobId: json["job"]["id"],
-          createdDate: json["createdDate"],
-          executionTime: json["executionTime"],
-          body: json["body"]);
+          done: json["done"],
+          // createdDate: json["createdDate"],
+          // executionTime: json["executionTime"],
+          body: json["body"],
+          job: JobDto.fromMap(json["job"]));
 
-  Map<String, dynamic> toMap() =>
-      {"executionTime": executionTime, "body": body};
-
-  factory ViewDeviceJobDto.fromJson(Map<String, dynamic> json) {
-    return ViewDeviceJobDto(
-        id: json["id"],
-        deviceId: json["deviceId"],
-        jobId: json["job"]["id"],
-        createdDate: json["createdDate"],
-        executionTime: json["executionTime"],
-        body: json["body"]);
-  }
+  Map<String, dynamic> toMap() => {
+        "id": id,
+        "deviceId": deviceId,
+        "done": done,
+        //"createdDate": createdDate,
+        //"executionTime": executionTime,
+        "body": body,
+        "job": job.toMap()
+      };
 }

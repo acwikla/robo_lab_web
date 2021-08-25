@@ -6,12 +6,12 @@ import 'package:robo_lab_web/requests/device_requests.dart';
 
 import '../gui.dart';
 
-class DevicesPage extends StatefulWidget {
+class DevicesListPage extends StatefulWidget {
   @override
-  _DevicesPageState createState() => _DevicesPageState();
+  createState() => _DevicesListPageState();
 }
 
-class _DevicesPageState extends State<DevicesPage> {
+class _DevicesListPageState extends State<DevicesListPage> {
   late Future<List<ViewDeviceDto>> _devices;
 
   @override
