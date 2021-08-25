@@ -22,7 +22,7 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
   //late List<ViewDeviceValueDto> _deviceJobValue;
   late Future<List<ViewDeviceValueDto>> _futureDeviceJobValues;
   late List<ViewDeviceValueDto> _deviceJobValues = [];
-  List<String> deviceValueAllPropertyNames = [];
+  List<String> deviceValueAllPropertyNames = []; //out
   late List<String> jobPropertyName = [];
   String _selectedProperty = 'Data';
   List<ViewDeviceValueDto> _propertyValue = [];
@@ -45,34 +45,14 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
       shadowColor: topPanelColor,
       //tooltipPosition: TooltipPosition.pointer
     );
-
-    //setData();
-
     super.initState();
-  }
-
-  void setData() {
-    String val = '';
-    _deviceJobValues.forEach(
-        (f) => {val = f.propertyName, print("_deviceJobValues: $val.")});
-    _deviceJobValues
-        .forEach((f) => deviceValueAllPropertyNames.add(f.propertyName));
-    jobPropertyName =
-        new Set<String>.from(deviceValueAllPropertyNames).toList();
-    //jobPropertyName.add('Time');
-    jobPropertyName.forEach((f) => print("result: $f"));
-    _deviceJobValues
-        .where((element) => element.propertyName == _selectedProperty)
-        .forEach((element) {
-      _propertyValue.add(element);
-    });
   }
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(flex: 2, child: _buildJobPropertiesTable(context)),
+        Expanded(flex: 1, child: _buildJobPropertiesTable(context)),
         Expanded(flex: 3, child: _buildJobValueChart(context))
       ],
     );
@@ -86,13 +66,13 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
         .forEach((f) => deviceValueAllPropertyNames.add(f.propertyName));
     jobPropertyName =
         new Set<String>.from(deviceValueAllPropertyNames).toList();
-    //jobPropertyName.add('Time');
     jobPropertyName.forEach((f) => print("result: $f"));
     _deviceJobValues
         .where((element) => element.propertyName == _selectedProperty)
         .forEach((element) {
       _propertyValue.add(element);
     });
+
     return Container(
         alignment: Alignment.topLeft,
         padding: EdgeInsets.fromLTRB(5, 40, 10, 40),
@@ -108,11 +88,30 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
               ),
             ),
             for (int i = 0; i <= jobPropertyName.length - 1; i++)
-              RadioListTile<String>(
+              ListTile(
+                contentPadding: EdgeInsets.fromLTRB(0, 20, 0, 0),
                 title:
                     Text('${jobPropertyName[i]}', style: Gui.textStyleCasual),
-                //tileColor:
-                //_propertyValue.isEmpty ? Colors.white : Colors.grey[300],
+                selected: false,
+                leading: Radio(
+                  value: jobPropertyName[i],
+                  groupValue: _selectedProperty,
+                  activeColor: peachPuff, //lightBlueGrey,
+                  focusColor: Colors.grey,
+                  onChanged: (String? value) {
+                    setState(() {
+                      _selectedProperty = value!;
+                      print('new');
+                      print(_selectedProperty);
+                      _propertyValue.clear();
+                    });
+                  },
+                ),
+              ),
+            /*
+          RadioListTile<String>(
+                title:
+                    Text('${jobPropertyName[i]}', style: Gui.textStyleCasual),
                 value: jobPropertyName[i],
                 activeColor: peachPuff,
                 groupValue: _selectedProperty,
@@ -125,21 +124,6 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
                   });
                 },
               ),
-            /*ListTile(
-                  title: Text(
-                    '${jobPropertyName[i]}',
-                  ),
-                  leading: Radio(
-                      value: _selectedData,
-                      groupValue: _selectedData,
-                      //activeColor: Color(0xFF6200EE),
-                      onChanged: (String? value) {
-                        setState(() {
-                          _selectedData = value!;
-                          print(_selectedData);
-                        });
-                      })),
-          
         */
           ],
         ));
