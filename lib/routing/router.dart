@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:robo_lab_web/pages/completed_jobs_page/completed_jobs_list_page.dart';
+import 'package:robo_lab_web/pages/completed_jobs_page/temp.dart';
 import 'package:robo_lab_web/pages/diagrams/diagrams_page.dart';
 import 'package:robo_lab_web/pages/devices_list_page.dart';
 import 'package:robo_lab_web/pages/home_page/home_page.dart';
@@ -19,7 +20,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case deviceCompletedJobsPageRoute:
       return _getPageRoute(HomePage());
     case diagramsPageRoute:
-      return _getPageRoute(DiagramsPage());
+      return _getPageRoute(TempCompletedJobDetailsPage()
+          //DiagramsPage()
+          );
     //case exampleTable:
     //return _getPageRoute(ExampleTablePage());
     default:
