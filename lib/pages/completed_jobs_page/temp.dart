@@ -3,7 +3,8 @@ import 'package:http/retry.dart';
 import 'package:robo_lab_web/constants/style_const.dart';
 import 'package:robo_lab_web/dto/view_device_value_dto.dart';
 import 'package:robo_lab_web/requests/device_jobs_requests.dart';
-
+import 'package:syncfusion_flutter_charts/charts.dart';
+import 'package:intl/intl.dart';
 import '../../global.dart';
 
 class TempCompletedJobDetailsPage extends StatefulWidget {
@@ -19,6 +20,7 @@ class _TempCompletedJobDetailsPageState
   late Future<List<ViewDeviceValueDto>> _futureDeviceJobValues;
   static late List<ViewDeviceValueDto> _deviceJobValues = [];
   static List<PropName> _propNameList = [];
+  static List<List<ViewDeviceValueDto>> _propNameValueList = [];
 
   @override
   void initState() {
@@ -47,13 +49,46 @@ class _TempCompletedJobDetailsPageState
     });
   }
 
-  Widget _buildCheckBoxList(BuildContext context) {
-    print('New reload');
+  void fetchPropertyNameValue() {
+    List<ViewDeviceValueDto> tempList = [];
 
-    _propNameList.forEach((element) {
-      print('name: ' + element.name);
-      print('isCheck: ' + element.isCheck.toString());
+    _propNameList.forEach((property) {
+      tempList = _deviceJobValues
+          .where((element) => element.propertyName == property.name)
+          .toList();
+      if (property.isCheck) {
+        //sprawdz czy dane zostały juz dodane
+        //jak nie to dodaj
+        //nie wyobrazam sobie innego przypadku w ktorym wartosc z danym id mialaby sie powtorzyc
+        if (tempList.isNotEmpty &&
+            !_propNameValueList
+                .any((element) => element.contains(tempList[0]))) {
+          _propNameValueList.add(tempList);
+        }
+      } else {
+        //jak dane istnieja to usun
+        //jak nie istnieja to nic nie rob
+        if (tempList.isNotEmpty &&
+            _propNameValueList
+                .any((element) => element.contains(tempList[0]))) {
+          _propNameValueList.removeWhere((list) =>
+              list.any((element) => element.propertyName == property.name));
+        }
+      }
     });
+  }
+
+  Widget _buildCheckBoxList(BuildContext context) {
+    fetchPropertyNameValue();
+    print('fetchPropertyNameValue():');
+    _propNameValueList.forEach((element) {
+      print(' list:');
+      element.forEach((e) {
+        print(e.value);
+      });
+    });
+    print('-------------');
+
     return Container(
         decoration: BoxDecoration(
           border: Border(
