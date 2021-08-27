@@ -20,9 +20,9 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     case deviceCompletedJobsPageRoute:
       return _getPageRoute(HomePage());
     case diagramsPageRoute:
-      return _getPageRoute(TempCompletedJobDetailsPage()
-          //DiagramsPage()
-          );
+      return _getPageRoute(
+          //TempCompletedJobDetailsPage()
+          DiagramsPage());
     //case exampleTable:
     //return _getPageRoute(ExampleTablePage());
     default:

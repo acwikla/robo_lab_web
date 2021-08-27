@@ -8,6 +8,11 @@ import 'package:robo_lab_web/gui.dart';
 import 'package:robo_lab_web/requests/device_jobs_requests.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
+import 'package:http/http.dart' as http;
+import 'dart:async';
+import 'dart:html' as html;
+
+//import 'package:url_launcher/url_launcher.dart';
 
 class CompletedJobsDetailedPage extends StatefulWidget {
   const CompletedJobsDetailedPage({Key? key}) : super(key: key);
@@ -56,6 +61,13 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
         Expanded(flex: 3, child: _buildJobValueChart(context))
       ],
     );
+  }
+
+  Future getExelFile() async {
+    html.window.open(
+        Uri.encodeFull(
+            'http://51.158.163.165/api/device-jobs/${Global.deviceJob.id}/export-all-job-values'),
+        'open');
   }
 
   Widget _buildJobPropertiesTable(BuildContext context) {
@@ -129,6 +141,20 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
                     ),
                   );
                 },
+              ),
+            ),
+            Container(
+              padding: EdgeInsets.fromLTRB(30, 40, 30, 40),
+              child: ElevatedButton(
+                style: Gui.buttonStyleSubmit,
+                child: new Text(
+                  "Get data",
+                  style: TextStyle(
+                      color: Colors.white,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1),
+                ),
+                onPressed: getExelFile,
               ),
             )
           ],
