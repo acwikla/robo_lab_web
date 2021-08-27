@@ -220,5 +220,4 @@ class LinearPropertyValue {
 
   double value;
   DateTime dateTime;
-  //Color? seriesColor;
 }
