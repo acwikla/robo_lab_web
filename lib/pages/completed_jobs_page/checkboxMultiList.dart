@@ -20,18 +20,26 @@ class _MultiSeriesChartJobDetailsPageState
   static late List<ViewDeviceValueDto> _deviceJobValues = [];
   static List<PropName> _propNameList = [];
   static List<List<ViewDeviceValueDto>> _propNameValueList = [];
-  late List<charts.Series<LinearPropertyValue, int>> _seriesList = [];
   static List<List<LinearPropertyValue>> _seriesListData = [];
+  late TooltipBehavior _tooltipBehavior;
 
   @override
   void initState() {
     _futureDeviceJobValues =
-        //DeviceJobsRequests.getDeviceJobValues(Global.deviceJob.id);
-        DeviceJobsRequests.getDeviceJobValues(67);
+        DeviceJobsRequests.getDeviceJobValues(Global.deviceJob.id);
     _futureDeviceJobValues.then((value) {
       setState(() => value.forEach((item) => _deviceJobValues.add(item)));
       _propNameList = PropName.getPropNames();
     });
+
+    _tooltipBehavior = TooltipBehavior(
+      enable: true,
+      duration: 5,
+      color: lightBlueGrey,
+      elevation: 10,
+      shadowColor: topPanelColor,
+    );
+
     super.initState();
   }
 
@@ -42,7 +50,6 @@ class _MultiSeriesChartJobDetailsPageState
         Expanded(flex: 1, child: _buildTitle(context)),
         Expanded(flex: 1, child: _buildCheckBoxList(context)),
         Expanded(flex: 5, child: _buildMultiSeriesChartData(context)),
-        //Expanded(flex: 5, child: _buildChartData(context)),
       ],
     );
   }
@@ -54,7 +61,7 @@ class _MultiSeriesChartJobDetailsPageState
   }
 
   void fetchPropertyNameValue() {
-    _seriesList.clear();
+    //_seriesList.clear();
     List<ViewDeviceValueDto> tempList = [];
 
     _propNameList.forEach((property) {
@@ -83,11 +90,8 @@ class _MultiSeriesChartJobDetailsPageState
     });
   }
 
-  //charts.Series<LinearPropertyValue, DateTime>
   void createChartSeries(List<List<ViewDeviceValueDto>> dataList) {
-    List<LinearPropertyValue> linearData = [];
     List<LinearPropertyValue> tempData = [];
-    int i = 0;
     print('dataList:');
     dataList.forEach((element) {
       print(' list:');
@@ -108,7 +112,7 @@ class _MultiSeriesChartJobDetailsPageState
       });
 
       _seriesListData.add(tempData);
-      _seriesList.add(
+      /* _seriesList.add(
         new charts.Series<LinearPropertyValue, int>(
             id: list[0].propertyName,
             domainFn: (LinearPropertyValue propertyValue, _) =>
@@ -119,9 +123,8 @@ class _MultiSeriesChartJobDetailsPageState
             seriesCategory: 'buuu',
             overlaySeries: true,
             displayName: list[0].propertyName),
-      );
+      );*/
       tempData = [];
-      i++;
     });
   }
 
@@ -223,7 +226,7 @@ class _MultiSeriesChartJobDetailsPageState
                   fontWeight: FontWeight.bold,
                   fontSize: 15,
                 ))),
-        //tooltipBehavior: _tooltipBehavior,
+        tooltipBehavior: _tooltipBehavior,
         plotAreaBorderColor: Colors.transparent,
         series: <ChartSeries>[
           for (int i = 0; i < _propNameValueList.length; i++)
@@ -237,14 +240,14 @@ class _MultiSeriesChartJobDetailsPageState
                 yValueMapper: (ViewDeviceValueDto deviceValueDto, _) =>
                     double.parse(deviceValueDto.value),
                 dataLabelSettings: DataLabelSettings(
-                    textStyle:
-                        TextStyle(fontSize: 14, color: Colors.blueGrey[800]),
+                    textStyle: TextStyle(
+                        fontSize: 14, color: Colors.blueGrey[400 + (i * 200)]),
                     isVisible: true),
                 enableTooltip: true),
         ],
         primaryXAxis: DateTimeAxis(
           edgeLabelPlacement: EdgeLabelPlacement.shift,
-          //dateFormat: DateFormat.Hms(),
+          //dateFormat: DateFormat.y(),
           labelStyle: TextStyle(color: Colors.black87, fontSize: 13),
           //rangePadding: ,
           axisLine: AxisLine(color: lightBlueGrey),
@@ -260,17 +263,6 @@ class _MultiSeriesChartJobDetailsPageState
             //decimalPlaces: 4,
             labelFormat: '{value}',
             labelStyle: TextStyle(color: Colors.black87, fontSize: 13)));
-  }
-
-  Widget _buildChartData(BuildContext context) {
-    return Container(
-      padding: EdgeInsets.fromLTRB(30, 50, 30, 50),
-      child: new charts.LineChart(_seriesList,
-          //layoutConfig: charts.LayoutConfig(),
-          animate: true,
-          defaultRenderer:
-              new charts.LineRendererConfig(includeArea: true, stacked: true)),
-    );
   }
 }
 
