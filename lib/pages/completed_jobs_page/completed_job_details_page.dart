@@ -5,6 +5,7 @@ import 'package:robo_lab_web/dto/view_device_job_dto.dart';
 import 'package:robo_lab_web/dto/view_device_value_dto.dart';
 import 'package:robo_lab_web/global.dart';
 import 'package:robo_lab_web/gui.dart';
+import 'package:robo_lab_web/patterns/custom_action_button.dart';
 import 'package:robo_lab_web/requests/device_jobs_requests.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import 'package:intl/intl.dart';
@@ -57,7 +58,7 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        Expanded(flex: 1, child: _buildJobPropertiesTable(context)),
+        Expanded(flex: 1, child: _buildSelectChartDataArea(context)),
         Expanded(flex: 3, child: _buildJobValueChart(context))
       ],
     );
@@ -70,7 +71,7 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
         'open');
   }
 
-  Widget _buildJobPropertiesTable(BuildContext context) {
+  Widget _buildSelectChartDataArea(BuildContext context) {
     String val = '';
     _deviceJobValues.forEach(
         (f) => {val = f.propertyName, print("_deviceJobValues: $val.")});
@@ -96,13 +97,12 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
             Text(
               'Select chart data',
               style: TextStyle(
-                fontFamily: 'Segoe UI',
                 color: darkerSteelBlue,
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
               ),
             ),
-            SizedBox(height: 15),
+            SizedBox(height: 10),
             Container(
               decoration: BoxDecoration(
                 border: Border(
@@ -118,7 +118,7 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
               ),
               child: ListView.builder(
                 shrinkWrap: true,
-                padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
+                padding: EdgeInsets.fromLTRB(0, 5, 0, 10),
                 itemCount: jobPropertyName.length ?? 0,
                 itemBuilder: (context, index) {
                   return ListTile(
@@ -143,22 +143,45 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
                 },
               ),
             ),
-            Container(
-              padding: EdgeInsets.fromLTRB(30, 40, 30, 40),
-              child: ElevatedButton(
-                style: Gui.buttonStyleSubmit,
-                child: new Text(
-                  "Get data",
-                  style: TextStyle(
-                      color: Colors.white,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1),
-                ),
-                onPressed: getExelFile,
-              ),
-            )
+            _buildDownloadExcelButton(context)
           ],
         ));
+  }
+
+  Widget _buildDownloadExcelButton(BuildContext context) {
+    return Column(
+      children: [
+        SizedBox(
+          height: 10,
+        ),
+        Text(
+          'Click button to download excel file with all the results.',
+          style: TextStyle(
+            color: darkerSteelBlue,
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+          child: FloatingActionButton(
+            mini: true, //??
+            onPressed: () {
+              // Add your onPressed code here!
+              getExelFile();
+            },
+            child: Icon(
+              Icons.download_sharp,
+              size: 22,
+            ),
+            backgroundColor: peachPuff,
+            hoverColor: lightBlueGrey,
+            elevation: 5,
+            tooltip: 'Download file',
+          ),
+        )
+      ],
+    );
   }
 
   Widget _buildJobValueChart(BuildContext context) {

@@ -131,9 +131,61 @@ class _SetJobPageState extends State<SetJobPage> {
                   SizedBox(height: 15),
                 ]);
               }),
-          SizedBox(height: 15),
-          _orderDevJobButton(context)
+          //SizedBox(height: 15),
+          //_orderDevJobButton(context)
+          _buildSubmitDevJobButton(context)
         ]));
+  }
+
+  Widget _buildSubmitDevJobButton(BuildContext context) {
+    return Column(
+      crossAxisAlignment: CrossAxisAlignment.center,
+      children: [
+        Text(
+          'Click button to submit a job.',
+          style: TextStyle(
+            color: darkerSteelBlue,
+            fontSize: 17,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Container(
+          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+          child: FloatingActionButton(
+            mini: true,
+            onPressed: () {
+              // Add your onPressed code here!
+              // Validate will return true if the form is valid
+              if (_formKey.currentState!.validate()) {
+                // Process data.
+                setState(() {
+                  _formKey.currentState!.save(); // run TextFormField onSaved
+                  _jobBodyValue = _jobBody.toString();
+                  newDeviceJob?.body = _jobBodyValue;
+                  newDeviceJob?.executionTime = '2021-08-10T21:36:17.9426078';
+                  _futureDeviceJob = DeviceJobsRequests.postDeviceJob(
+                      1, //GlobalData.globalDevice.id,
+                      1, //selectedJob!.id,
+                      newDeviceJob!);
+                });
+                print(newDeviceJob!.body);
+                print(newDeviceJob!.executionTime);
+              }
+            },
+            child: Icon(
+              Icons.check,
+              size: 25,
+            ),
+            backgroundColor: peachPuff,
+            hoverColor: lightBlueGrey,
+            elevation: 5,
+            tooltip: 'Submit job',
+          ),
+        ),
+        SizedBox(height: 15),
+        _returnRequestMessage(context),
+      ],
+    );
   }
 
   Widget _orderDevJobButton(BuildContext context) {

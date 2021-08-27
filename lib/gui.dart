@@ -11,7 +11,7 @@ class Gui {
       color: Colors.black87, fontSize: 17, fontWeight: FontWeight.w600);
 
   static final textStyleCasual = TextStyle(
-      color: Colors.black87, fontSize: 16, fontWeight: FontWeight.normal);
+      color: Colors.black87, fontSize: 17, fontWeight: FontWeight.normal);
 
   static final buttonStyleSubmit = ButtonStyle(
       shadowColor: MaterialStateProperty.all(Colors.grey),
