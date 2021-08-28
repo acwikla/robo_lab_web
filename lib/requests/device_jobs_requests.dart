@@ -39,7 +39,7 @@ class DeviceJobsRequests {
     } else {
       // If the server did not return a 201 CREATED response,
       // then throw an exception.
-      throw Exception('Failed to submit job.');
+      throw Exception('Failed to sumbit job.');
     }
   }
 

@@ -1,19 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:robo_lab_web/constants/style_const.dart';
-import 'package:robo_lab_web/dto/view_device_job_dto.dart';
 import 'package:robo_lab_web/dto/view_device_value_dto.dart';
-import 'package:robo_lab_web/global.dart';
-import 'package:robo_lab_web/gui.dart';
-import 'package:robo_lab_web/patterns/custom_action_button.dart';
 import 'package:robo_lab_web/requests/device_jobs_requests.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
-import 'package:intl/intl.dart';
-import 'package:http/http.dart' as http;
+import '../../global.dart';
 import 'dart:async';
 import 'dart:html' as html;
-
-//import 'package:url_launcher/url_launcher.dart';
 
 class CompletedJobsDetailedPage extends StatefulWidget {
   const CompletedJobsDetailedPage({Key? key}) : super(key: key);
@@ -24,23 +17,20 @@ class CompletedJobsDetailedPage extends StatefulWidget {
 }
 
 class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
-  late TooltipBehavior _tooltipBehavior;
-  //late List<ViewDeviceValueDto> _deviceJobValue;
   late Future<List<ViewDeviceValueDto>> _futureDeviceJobValues;
-  late List<ViewDeviceValueDto> _deviceJobValues = [];
-  List<String> deviceValueAllPropertyNames = []; //out
-  late List<String> jobPropertyName = [];
-  String _selectedProperty = 'Data';
-  List<ViewDeviceValueDto> _propertyValue = [];
+  static late List<ViewDeviceValueDto> _deviceJobValues = [];
+  static List<PropName> _propNameList = [];
+  static List<List<ViewDeviceValueDto>> _propNameValueList = [];
+  static List<List<LinearPropertyValue>> _seriesListData = [];
+  late TooltipBehavior _tooltipBehavior;
 
   @override
   void initState() {
     _futureDeviceJobValues =
         DeviceJobsRequests.getDeviceJobValues(Global.deviceJob.id);
-    //convert Future<List<T> -> List<T>,
-    //_deviceJobValues = await _futureDeviceJobValues;- nope
     _futureDeviceJobValues.then((value) {
       setState(() => value.forEach((item) => _deviceJobValues.add(item)));
+      _propNameList = PropName.getPropNames();
     });
 
     _tooltipBehavior = TooltipBehavior(
@@ -49,8 +39,8 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
       color: lightBlueGrey,
       elevation: 10,
       shadowColor: topPanelColor,
-      //tooltipPosition: TooltipPosition.pointer
     );
+
     super.initState();
   }
 
@@ -59,9 +49,83 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
     return Row(
       children: [
         Expanded(flex: 1, child: _buildSelectChartDataArea(context)),
-        Expanded(flex: 3, child: _buildJobValueChart(context))
+        Expanded(flex: 3, child: _buildMultiSeriesChartData(context)),
       ],
     );
+  }
+
+  void itemChange(bool val, int index) {
+    setState(() {
+      _propNameList[index].isCheck = val;
+    });
+  }
+
+  void fetchPropertyNameValue() {
+    //_seriesList.clear();
+    List<ViewDeviceValueDto> tempList = [];
+
+    _propNameList.forEach((property) {
+      tempList = _deviceJobValues
+          .where((element) => element.propertyName == property.name)
+          .toList();
+      if (property.isCheck) {
+        //sprawdz czy dane zostały juz dodane
+        //jak nie to dodaj
+        //nie wyobrazam sobie innego przypadku w ktorym wartosc z danym id mialaby sie powtorzyc
+        if (tempList.isNotEmpty &&
+            !_propNameValueList
+                .any((element) => element.contains(tempList[0]))) {
+          _propNameValueList.add(tempList);
+        }
+      } else {
+        //jak dane istnieja to usun
+        //jak nie istnieja to nic nie rob
+        if (tempList.isNotEmpty &&
+            _propNameValueList
+                .any((element) => element.contains(tempList[0]))) {
+          _propNameValueList.removeWhere((list) =>
+              list.any((element) => element.propertyName == property.name));
+        }
+      }
+    });
+  }
+
+  void createChartSeries(List<List<ViewDeviceValueDto>> dataList) {
+    List<LinearPropertyValue> tempData = [];
+    print('dataList:');
+    dataList.forEach((element) {
+      print(' list:');
+      element.forEach((e) {
+        print(e.value);
+      });
+    });
+    print('-------------');
+
+    dataList.forEach((list) {
+      list.forEach((element) {
+        tempData.add(new LinearPropertyValue(
+            value: double.parse(element.value), dateTime: element.dateTime));
+      });
+      print('tempData:');
+      tempData.forEach((element) {
+        print(element.value);
+      });
+
+      _seriesListData.add(tempData);
+      /* _seriesList.add(
+        new charts.Series<LinearPropertyValue, int>(
+            id: list[0].propertyName,
+            domainFn: (LinearPropertyValue propertyValue, _) =>
+                propertyValue.dateTime.second,
+            measureFn: (LinearPropertyValue propertyValue, _) =>
+                propertyValue.value.toInt(),
+            data: _seriesListData[i],
+            seriesCategory: 'buuu',
+            overlaySeries: true,
+            displayName: list[0].propertyName),
+      );*/
+      tempData = [];
+    });
   }
 
   Future getExelFile() async {
@@ -72,90 +136,81 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
   }
 
   Widget _buildSelectChartDataArea(BuildContext context) {
-    String val = '';
-    _deviceJobValues.forEach(
-        (f) => {val = f.propertyName, print("_deviceJobValues: $val.")});
-    _deviceJobValues
-        .forEach((f) => deviceValueAllPropertyNames.add(f.propertyName));
-    jobPropertyName =
-        new Set<String>.from(deviceValueAllPropertyNames).toList();
-    if (jobPropertyName.isEmpty) {
-      jobPropertyName.add('Job has no value to view.');
-    }
-    jobPropertyName.forEach((f) => print("result: $f"));
-    _deviceJobValues
-        .where((element) => element.propertyName == _selectedProperty)
-        .forEach((element) {
-      _propertyValue.add(element);
-    });
+    fetchPropertyNameValue();
+    createChartSeries(_propNameValueList);
 
-    return Container(
-        alignment: Alignment.topLeft,
-        padding: EdgeInsets.fromLTRB(10, 40, 30, 40),
-        child: ListView(
-          children: [
-            Text(
-              'Select chart data',
-              style: TextStyle(
-                color: darkerSteelBlue,
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
-              ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        Container(
+          margin: EdgeInsets.fromLTRB(20, 40, 10, 10),
+          child: Text(
+            'Select chart data',
+            style: TextStyle(
+              fontFamily: 'Segoe UI',
+              color: darkerSteelBlue,
+              fontSize: 18,
+              fontWeight: FontWeight.bold,
             ),
-            SizedBox(height: 10),
-            Container(
-              decoration: BoxDecoration(
-                border: Border(
-                  top: BorderSide(
-                    color: lightBlueGrey.withOpacity(.6),
-                    width: 1.5,
-                  ),
-                  bottom: BorderSide(
-                    color: lightBlueGrey.withOpacity(.6),
-                    width: 1.5,
-                  ),
+          ),
+        ),
+        Expanded(
+          child: _buildCheckBoxList(context),
+        ),
+        Container(
+          margin: EdgeInsets.fromLTRB(20, 40, 10, 30),
+          child: _buildDownloadExcelButton(context),
+        )
+      ],
+    );
+  }
+
+  Widget _buildCheckBoxList(BuildContext context) {
+    return ListView.builder(
+      itemCount: _propNameList.length,
+      itemBuilder: (context, index) {
+        return Container(
+            margin: EdgeInsets.fromLTRB(20, 0, 0, 0),
+            decoration: BoxDecoration(
+              border: Border(
+                top: BorderSide(
+                  color: lightBlueGrey.withOpacity(.6),
+                  width: 1.5,
                 ),
               ),
-              child: ListView.builder(
-                shrinkWrap: true,
-                padding: EdgeInsets.fromLTRB(0, 5, 0, 10),
-                itemCount: jobPropertyName.length ?? 0,
-                itemBuilder: (context, index) {
-                  return ListTile(
-                    title: Text('${jobPropertyName[index]}',
-                        style: Gui.textStyleCasual),
-                    selected: false,
-                    leading: Radio(
-                      value: jobPropertyName[index],
-                      groupValue: _selectedProperty,
-                      activeColor: peachPuff, //lightBlueGrey,
-                      focusColor: Colors.grey,
-                      onChanged: (String? value) {
-                        setState(() {
-                          _selectedProperty = value!;
-                          print('new');
-                          print(_selectedProperty);
-                          _propertyValue.clear();
-                        });
-                      },
-                    ),
-                  );
-                },
-              ),
             ),
-            _buildDownloadExcelButton(context)
-          ],
-        ));
+            child: Column(
+              children: [
+                new CheckboxListTile(
+                    activeColor: peachPuff,
+                    dense: true,
+                    title: new Text(
+                      _propNameList[index].name,
+                      style: TextStyle(
+                        fontSize: 16,
+                        fontFamily: 'Segoe UI',
+                        //fontFamily: GoogleFonts.ptSansTextTheme.toString(),
+                        fontWeight: FontWeight.normal,
+                        //letterSpacing: 0.5
+                      ),
+                    ),
+                    value: _propNameList[index].isCheck,
+                    onChanged: (bool? val) {
+                      itemChange(val!, index);
+                    })
+              ],
+            ));
+      },
+    );
   }
 
   Widget _buildDownloadExcelButton(BuildContext context) {
     return Column(
       children: [
-        SizedBox(
-          height: 10,
-        ),
         Text(
           'Click button to download excel file with all the results.',
+          //'Download excel file with all the results.',
           style: TextStyle(
             color: darkerSteelBlue,
             fontSize: 17,
@@ -167,7 +222,6 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
           child: FloatingActionButton(
             mini: true, //??
             onPressed: () {
-              // Add your onPressed code here!
               getExelFile();
             },
             child: Icon(
@@ -177,42 +231,39 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
             backgroundColor: peachPuff,
             hoverColor: lightBlueGrey,
             elevation: 5,
-            tooltip: 'Download file',
+            tooltip: 'Download excel file',
           ),
         )
       ],
     );
   }
 
-  Widget _buildJobValueChart(BuildContext context) {
+  Widget _buildMultiSeriesChartData(BuildContext context) {
     return SfCartesianChart(
         backgroundColor: Colors.transparent,
         title: ChartTitle(
           text: 'Results of the completed job: ${Global.deviceJob.id}',
           alignment: ChartAlignment.far,
-          borderColor: Colors.transparent,
-          backgroundColor: Colors.transparent,
           textStyle: TextStyle(
             color: darkerSteelBlue,
             fontSize: 15,
             fontWeight: FontWeight.bold,
             decoration: TextDecoration.underline,
             decorationColor: lightBlueGrey,
-            decorationThickness: 2,
+            decorationThickness: 2.85,
             decorationStyle: TextDecorationStyle.solid,
           ),
         ),
-        margin: EdgeInsets.fromLTRB(10, 40, 10, 40),
-        //palette
+        margin: EdgeInsets.fromLTRB(30, 40, 10, 40),
         plotAreaBackgroundColor: superLightBlueGrey,
+        borderWidth: 2,
         legend: Legend(
             isVisible: true,
             position: LegendPosition.top,
             alignment: ChartAlignment.center,
-            //borderColor: lighterPeachPuff,
-            //borderWidth: 2,
             //offset: Offset(40, 40),
-            //overflowMode: LegendItemOverflowMode.wrap,
+            backgroundColor: Colors.white,
+            overflowMode: LegendItemOverflowMode.wrap,
             title: LegendTitle(
                 text: 'Data',
                 textStyle: TextStyle(
@@ -223,29 +274,27 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
         tooltipBehavior: _tooltipBehavior,
         plotAreaBorderColor: Colors.transparent,
         series: <ChartSeries>[
-          LineSeries<ViewDeviceValueDto, DateTime>(
-              width: 2,
-              name: _selectedProperty,
-              color: leftMenuColor,
-              dataSource: _propertyValue,
-              xValueMapper: (ViewDeviceValueDto deviceValueDto, _) =>
-                  deviceValueDto.dateTime,
-              yValueMapper: (ViewDeviceValueDto deviceValueDto, _) =>
-                  double.parse(deviceValueDto.value),
-              dataLabelSettings: DataLabelSettings(
-                  textStyle: TextStyle(
-                      fontFamily:
-                          GoogleFonts.ptSansTextTheme.toString(), //'Roboto',
-                      fontSize: 14,
-                      color: Colors.blueGrey[800]),
-                  isVisible: true),
-              enableTooltip: true),
+          for (int i = 0; i < _propNameValueList.length; i++)
+            LineSeries<ViewDeviceValueDto, DateTime>(
+                width: 2,
+                name: _propNameValueList[i][0].propertyName,
+                color: Colors.teal[400 + (i * 200)],
+                //.blueGrey[400 + (i * 200)], //leftMenuColor,
+                dataSource: _propNameValueList[i],
+                xValueMapper: (ViewDeviceValueDto deviceValueDto, _) =>
+                    deviceValueDto.dateTime,
+                yValueMapper: (ViewDeviceValueDto deviceValueDto, _) =>
+                    double.parse(deviceValueDto.value),
+                dataLabelSettings: DataLabelSettings(
+                    textStyle:
+                        TextStyle(fontSize: 14, color: Colors.blueGrey[400]),
+                    isVisible: true),
+                enableTooltip: true),
         ],
         primaryXAxis: DateTimeAxis(
           edgeLabelPlacement: EdgeLabelPlacement.shift,
-          dateFormat: DateFormat.Hms(),
+          //dateFormat: DateFormat.y(),
           labelStyle: TextStyle(color: Colors.black87, fontSize: 13),
-          //rangePadding: ,
           axisLine: AxisLine(color: lightBlueGrey),
           title: AxisTitle(
               text: 'Time',
@@ -259,15 +308,31 @@ class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
             //decimalPlaces: 4,
             labelFormat: '{value}',
             labelStyle: TextStyle(color: Colors.black87, fontSize: 13)));
-
-    /*return FutureBuilder<List<ViewDeviceValueDto>>(
-        future: _futureDeviceJobValues,
-        builder: (context, snapshot) {
-          if (snapshot.hasData == false) {
-            return Center(child: CircularProgressIndicator(color: skyBlue));
-          } else {
-            return SfCartesianChart([...]);
-          }
-        });*/
   }
+}
+
+class PropName {
+  PropName({this.isCheck = false, required this.name});
+  bool isCheck;
+  String name;
+
+  static List<PropName> getPropNames() {
+    List<String> tempList = [];
+    List<String> tempUniqueList = [];
+    List<PropName> finalList = [];
+    _CompletedJobsDetailedPageState._deviceJobValues
+        .forEach((f) => tempList.add(f.propertyName));
+    tempUniqueList = new Set<String>.from(tempList).toList();
+    tempUniqueList.forEach((element) {
+      finalList.add(new PropName(name: element));
+    });
+    return finalList;
+  }
+}
+
+class LinearPropertyValue {
+  LinearPropertyValue({required this.value, required this.dateTime});
+
+  double value;
+  DateTime dateTime;
 }

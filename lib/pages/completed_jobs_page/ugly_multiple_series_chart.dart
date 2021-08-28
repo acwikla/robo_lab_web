@@ -5,16 +5,15 @@ import 'package:robo_lab_web/requests/device_jobs_requests.dart';
 import 'package:charts_flutter/flutter.dart' as charts;
 import '../../global.dart';
 
-class TempCompletedJobDetailsPage extends StatefulWidget {
-  const TempCompletedJobDetailsPage({Key? key}) : super(key: key);
+class MultipleSeriesChartPage extends StatefulWidget {
+  const MultipleSeriesChartPage({Key? key}) : super(key: key);
 
   @override
-  _TempCompletedJobDetailsPageState createState() =>
-      _TempCompletedJobDetailsPageState();
+  _MultipleSeriesChartPageState createState() =>
+      _MultipleSeriesChartPageState();
 }
 
-class _TempCompletedJobDetailsPageState
-    extends State<TempCompletedJobDetailsPage> {
+class _MultipleSeriesChartPageState extends State<MultipleSeriesChartPage> {
   late Future<List<ViewDeviceValueDto>> _futureDeviceJobValues;
   static late List<ViewDeviceValueDto> _deviceJobValues = [];
   static List<PropName> _propNameList = [];
@@ -205,7 +204,7 @@ class PropName {
     List<String> tempList = [];
     List<String> tempUniqueList = [];
     List<PropName> finalList = [];
-    _TempCompletedJobDetailsPageState._deviceJobValues
+    _MultipleSeriesChartPageState._deviceJobValues
         .forEach((f) => tempList.add(f.propertyName));
     tempUniqueList = new Set<String>.from(tempList).toList();
     tempUniqueList.forEach((element) {

@@ -131,7 +131,6 @@ class _SetJobPageState extends State<SetJobPage> {
                   SizedBox(height: 15),
                 ]);
               }),
-          //SizedBox(height: 15),
           //_orderDevJobButton(context)
           _buildSubmitDevJobButton(context)
         ]));
@@ -154,13 +153,16 @@ class _SetJobPageState extends State<SetJobPage> {
           child: FloatingActionButton(
             mini: true,
             onPressed: () {
-              // Add your onPressed code here!
               // Validate will return true if the form is valid
               if (_formKey.currentState!.validate()) {
                 // Process data.
                 setState(() {
                   _formKey.currentState!.save(); // run TextFormField onSaved
-                  _jobBodyValue = _jobBody.toString();
+                  if (_jobBody.toString() == "") {
+                    _jobBodyValue = 'nan';
+                  } else {
+                    _jobBodyValue = _jobBody.toString();
+                  }
                   newDeviceJob?.body = _jobBodyValue;
                   newDeviceJob?.executionTime = '2021-08-10T21:36:17.9426078';
                   _futureDeviceJob = DeviceJobsRequests.postDeviceJob(
@@ -198,7 +200,11 @@ class _SetJobPageState extends State<SetJobPage> {
             // Process data.
             setState(() {
               _formKey.currentState!.save(); // run TextFormField onSaved
-              _jobBodyValue = _jobBody.toString();
+              if (_jobBody.toString() == "") {
+                _jobBodyValue = 'nan';
+              } else {
+                _jobBodyValue = _jobBody.toString();
+              }
               newDeviceJob?.body = _jobBodyValue;
               newDeviceJob?.executionTime = '2021-08-10T21:36:17.9426078';
               _futureDeviceJob = DeviceJobsRequests.postDeviceJob(
