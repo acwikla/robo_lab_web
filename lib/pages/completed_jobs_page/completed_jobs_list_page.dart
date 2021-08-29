@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:robo_lab_web/constants/controllers_instance.dart';
 import 'package:robo_lab_web/dto/view_device_job_dto.dart';
 import 'package:robo_lab_web/global.dart';
 import 'package:robo_lab_web/gui.dart';
 import 'package:robo_lab_web/requests/device_jobs_requests.dart';
+import 'package:robo_lab_web/routing/routes.dart';
 
 class CompletedJobsListPage extends StatefulWidget {
   @override
@@ -59,8 +61,10 @@ class _CompletedJobsListPageState extends State<CompletedJobsListPage> {
       leading: _getIcon(devJob),
       onTap: () {
         setState(() {
-          //Global.device = dev;
-          //Global.deviceType = dev.deviceType;
+          if (devJob.done) {
+            navigationController.navigateTo(completedJobDetailsPageRoute,
+                arguments: devJob);
+          }
         });
         //Navigator.pushReplacementNamed(context, routes.deviceDetails);
       },

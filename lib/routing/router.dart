@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:robo_lab_web/dto/view_device_job_dto.dart';
 import 'package:robo_lab_web/pages/completed_jobs_page/completed_job_details_page.dart';
 import 'package:robo_lab_web/pages/completed_jobs_page/completed_jobs_list_page.dart';
 import 'package:robo_lab_web/pages/completed_jobs_page/single_series_chart.dart';
@@ -10,6 +11,8 @@ import 'package:robo_lab_web/pages/set_job/set_job_page.dart';
 import 'package:robo_lab_web/routing/routes.dart';
 
 Route<dynamic> generateRoute(RouteSettings settings) {
+  var args = settings.arguments;
+
   switch (settings.name) {
     //case homePageRoute:
     //return _getPageRoute(HomePage());
@@ -19,8 +22,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
       return _getPageRoute(SetJobPage());
     case deviceCompletedJobsPageRoute:
       return _getPageRoute(CompletedJobsListPage());
-    case deviceCompletedJobsPageRoute:
-      return _getPageRoute(HomePage());
+    case completedJobDetailsPageRoute:
+      return _getPageRoute(CompletedJobDetailsPage(
+        deviceJob: args as ViewDeviceJobDto,
+      ));
     case diagramsPageRoute:
       return _getPageRoute(
           //SingleSeriesChartPage()

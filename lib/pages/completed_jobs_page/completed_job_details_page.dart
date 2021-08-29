@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
 import 'package:robo_lab_web/constants/style_const.dart';
+import 'package:robo_lab_web/dto/view_device_job_dto.dart';
 import 'package:robo_lab_web/dto/view_device_value_dto.dart';
 import 'package:robo_lab_web/requests/device_jobs_requests.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
@@ -8,15 +8,17 @@ import '../../global.dart';
 import 'dart:async';
 import 'dart:html' as html;
 
-class CompletedJobsDetailedPage extends StatefulWidget {
-  const CompletedJobsDetailedPage({Key? key}) : super(key: key);
+class CompletedJobDetailsPage extends StatefulWidget {
+  final ViewDeviceJobDto deviceJob;
+
+  const CompletedJobDetailsPage({Key? key, required this.deviceJob})
+      : super(key: key);
 
   @override
-  _CompletedJobsDetailedPageState createState() =>
-      _CompletedJobsDetailedPageState();
+  createState() => _CompletedJobDetailsPageState();
 }
 
-class _CompletedJobsDetailedPageState extends State<CompletedJobsDetailedPage> {
+class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
   late Future<List<ViewDeviceValueDto>> _futureDeviceJobValues;
   static late List<ViewDeviceValueDto> _deviceJobValues = [];
   static List<PropName> _propNameList = [];
@@ -320,7 +322,7 @@ class PropName {
     List<String> tempList = [];
     List<String> tempUniqueList = [];
     List<PropName> finalList = [];
-    _CompletedJobsDetailedPageState._deviceJobValues
+    _CompletedJobDetailsPageState._deviceJobValues
         .forEach((f) => tempList.add(f.propertyName));
     tempUniqueList = new Set<String>.from(tempList).toList();
     tempUniqueList.forEach((element) {

@@ -20,7 +20,7 @@ class Global {
   static ViewDeviceJobDto deviceJob = ViewDeviceJobDto(
       id: 67,
       deviceId: 120,
-      done: false,
+      done: true,
       job: JobDto(
           description: "",
           deviceTypeName: "",
