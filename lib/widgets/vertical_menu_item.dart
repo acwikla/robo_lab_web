@@ -24,7 +24,8 @@ class VerticalMenuItem extends StatelessWidget {
             : menuController.onHover("not hovering");
       },
       child: Obx(() => Container(
-            color: menuController.isHovering(itemName)
+            color: menuController.isHovering(itemName) ||
+                    menuController.isActive(itemName)
                 ? papayaWhip.withOpacity(.1)
                 : Colors.transparent,
             child: Row(
@@ -32,8 +33,7 @@ class VerticalMenuItem extends StatelessWidget {
                 Visibility(
                   visible: menuController.isHovering(itemName) ||
                       menuController.isActive(itemName),
-                  child: Container(
-                      width: 3, height: 72, color: Colors.white /*peachPuff*/),
+                  child: Container(width: 3, height: 72, color: peachPuff),
                   maintainSize: true,
                   maintainState: true,
                   maintainAnimation: true,
@@ -52,14 +52,14 @@ class VerticalMenuItem extends StatelessWidget {
                           child: CustomText(
                         text: itemName,
                         color: menuController.isHovering(itemName)
-                            ? Colors.white //peachPuff
-                            : Colors.grey, //papayaWhip,
+                            ? peachPuff
+                            : papayaWhip,
                       ))
                     else
                       Flexible(
                           child: CustomText(
                               text: itemName,
-                              color: Colors.white, //peachPuff,
+                              color: peachPuff,
                               size: 16,
                               weight: FontWeight.bold))
                   ],

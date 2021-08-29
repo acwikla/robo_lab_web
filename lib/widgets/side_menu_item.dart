@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:robo_lab_web/helpers/responsivness.dart';
-import 'package:robo_lab_web/widgets/horizontal_menu.dart';
-import 'package:robo_lab_web/widgets/vertical_menu.dart';
+import 'package:robo_lab_web/widgets/horizontal_menu_item.dart';
+import 'package:robo_lab_web/widgets/vertical_menu_item.dart';
 
 class SideMenuItem extends StatelessWidget {
   final String itemName;

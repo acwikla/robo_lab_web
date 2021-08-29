@@ -54,13 +54,9 @@ class MenuController extends GetxController {
   //method changes if the icon is active
   //if the icon is active, it is dark and bigger than the others
   Widget _customIcon(IconData icon, String itemName) {
-    if (isActive(itemName))
-      return Icon(icon, size: 22, color: Colors.white /*peachPuff*/);
+    if (isActive(itemName)) return Icon(icon, size: 22, color: peachPuff);
 
     //if the icon is inactive, this one will be returned
-    return Icon(icon,
-        color: isHovering(itemName)
-            ? Colors.white
-            : Colors.grey); //peachPuff : papayaWhip);
+    return Icon(icon, color: isHovering(itemName) ? peachPuff : papayaWhip);
   }
 }

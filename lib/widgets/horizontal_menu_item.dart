@@ -23,7 +23,8 @@ class HorizontalMenuItem extends StatelessWidget {
             : menuController.onHover("not hovering");
       },
       child: Obx(() => Container(
-            color: menuController.isHovering(itemName)
+            color: menuController.isHovering(itemName) ||
+                    menuController.isActive(itemName)
                 ? papayaWhip.withOpacity(.1)
                 : Colors.transparent,
             child: Row(
