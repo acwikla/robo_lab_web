@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:robo_lab_web/constants/style_const.dart';
+import 'package:robo_lab_web/global.dart';
 import 'package:robo_lab_web/patterns/custom_text.dart';
 
 AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
@@ -50,7 +51,9 @@ AppBar topNavigationBar(BuildContext context, GlobalKey<ScaffoldState> key) =>
             width: 24,
           ),
           CustomText(
-              text: "Booo BoBoo", color: Colors.grey /*papayaWhip*/, size: 18),
+              text: Global.user.login,
+              color: Colors.grey /*papayaWhip*/,
+              size: 18),
           SizedBox(
             width: 16,
           ),
