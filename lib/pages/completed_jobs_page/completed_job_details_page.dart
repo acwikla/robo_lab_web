@@ -73,7 +73,7 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
           return Row(
             children: [
               Expanded(flex: 1, child: _buildSelectChartDataArea(context)),
-              Expanded(flex: 3, child: _buildMultiSeriesChartData(context)),
+              Expanded(flex: 3, child: _buildChartDataSide(context)),
             ],
           );
         }
@@ -129,10 +129,10 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
         Expanded(
           child: _buildCheckBoxList(context),
         ),
-        Container(
-          margin: EdgeInsets.fromLTRB(20, 40, 10, 30),
-          child: _buildDownloadExcelButton(context),
-        )
+        //Container(
+        //margin: EdgeInsets.fromLTRB(20, 40, 10, 30),
+        //child: _buildDownloadExcelButton(context),
+        //)
       ],
     );
   }
@@ -180,11 +180,11 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
     return Column(
       children: [
         Text(
-          'Click button to download excel file with all the results.',
+          'Download excel file with all the results.',
           //'Download excel file with all the results.',
           style: TextStyle(
             color: darkerSteelBlue,
-            fontSize: 17,
+            fontSize: 16,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -225,7 +225,7 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
             decorationStyle: TextDecorationStyle.solid,
           ),
         ),
-        margin: EdgeInsets.fromLTRB(30, 40, 10, 40),
+        margin: EdgeInsets.fromLTRB(0, 0, 0, 15),
         plotAreaBackgroundColor: superLightBlueGrey,
         borderWidth: 2,
         legend: Legend(
@@ -280,6 +280,28 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
             //decimalPlaces: 4,
             labelFormat: '{value}',
             labelStyle: TextStyle(color: Colors.black87, fontSize: 13)));
+  }
+
+  Widget _buildChartDataSide(BuildContext context) {
+    return Container(
+      margin: EdgeInsets.fromLTRB(30, 40, 10, 15),
+      child: Column(
+        children: [
+          Expanded(
+            flex: 7,
+            child: _buildMultiSeriesChartData(context),
+          ),
+          Divider(
+            color: lightBlueGrey.withOpacity(.6),
+            thickness: 1.5,
+          ),
+          Expanded(
+              child: Row(
+                  mainAxisAlignment: MainAxisAlignment.end,
+                  children: [_buildDownloadExcelButton(context)]))
+        ],
+      ),
+    );
   }
 }
 
