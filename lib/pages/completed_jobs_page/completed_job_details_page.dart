@@ -7,6 +7,7 @@ import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../global.dart';
 import 'dart:async';
 import 'dart:html' as html;
+import "package:collection/collection.dart";
 
 class CompletedJobDetailsPage extends StatefulWidget {
   final ViewDeviceJobDto deviceJob;
@@ -19,40 +20,64 @@ class CompletedJobDetailsPage extends StatefulWidget {
 }
 
 class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
-  late Future<List<ViewDeviceValueDto>> _futureDeviceJobValues;
-  static late List<ViewDeviceValueDto> _deviceJobValues = [];
-  static List<PropName> _propNameList = [];
-  static List<List<ViewDeviceValueDto>> _propNameValueList = [];
-  static List<List<LinearPropertyValue>> _seriesListData = [];
+  // raw data
+  late List<PropName> _propNameList;
+  late Map<String, List<ViewDeviceValueDto>> _devJobValuesGrouped;
+
+  late Future<bool> _dataLoaded;
+
+  // chart data
+  //late Map<String, List<LinearPropertyValue>> _seriesListData;
+
   late TooltipBehavior _tooltipBehavior;
 
   @override
   void initState() {
-    _futureDeviceJobValues =
-        DeviceJobsRequests.getDeviceJobValues(Global.deviceJob.id);
-    _futureDeviceJobValues.then((value) {
-      setState(() => value.forEach((item) => _deviceJobValues.add(item)));
-      _propNameList = PropName.getPropNames();
+    _dataLoaded = DeviceJobsRequests.getDeviceJobValues(Global.deviceJob.id)
+        .then((values) {
+      //setState(() {
+      // all device values grouped by property name
+      _devJobValuesGrouped = groupBy(values, (ViewDeviceValueDto value) {
+        return value.propertyName;
+      });
+
+      // properties settings (name, isCheck)
+      _propNameList =
+          _devJobValuesGrouped.keys.map((e) => PropName(name: e)).toList();
+
+      return true;
+
+      // create chart series
+      //_createChartSeries(_devJobValuesGrouped);
+      //});
     });
 
     _tooltipBehavior = TooltipBehavior(
-      enable: true,
-      duration: 5,
-      color: lightBlueGrey,
-      elevation: 10,
-      shadowColor: topPanelColor,
-    );
+        enable: true,
+        duration: 5,
+        color: lightBlueGrey,
+        elevation: 10,
+        shadowColor: topPanelColor);
 
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: [
-        Expanded(flex: 1, child: _buildSelectChartDataArea(context)),
-        Expanded(flex: 3, child: _buildMultiSeriesChartData(context)),
-      ],
+    return FutureBuilder<bool>(
+      future: _dataLoaded,
+      builder: (context, snapshot) {
+        if (snapshot.hasData == false) {
+          return Center(child: CircularProgressIndicator());
+        } else {
+          return Row(
+            children: [
+              Expanded(flex: 1, child: _buildSelectChartDataArea(context)),
+              Expanded(flex: 3, child: _buildMultiSeriesChartData(context)),
+            ],
+          );
+        }
+      },
     );
   }
 
@@ -62,75 +87,22 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
     });
   }
 
-  void fetchPropertyNameValue() {
-    //_seriesList.clear();
-    List<ViewDeviceValueDto> tempList = [];
+  // void _createChartSeries(Map<String, List<ViewDeviceValueDto>> valuesMap) {
+  //   // clear series data
+  //   _seriesListData = {};
 
-    _propNameList.forEach((property) {
-      tempList = _deviceJobValues
-          .where((element) => element.propertyName == property.name)
-          .toList();
-      if (property.isCheck) {
-        //sprawdz czy dane zostały juz dodane
-        //jak nie to dodaj
-        //nie wyobrazam sobie innego przypadku w ktorym wartosc z danym id mialaby sie powtorzyc
-        if (tempList.isNotEmpty &&
-            !_propNameValueList
-                .any((element) => element.contains(tempList[0]))) {
-          _propNameValueList.add(tempList);
-        }
-      } else {
-        //jak dane istnieja to usun
-        //jak nie istnieja to nic nie rob
-        if (tempList.isNotEmpty &&
-            _propNameValueList
-                .any((element) => element.contains(tempList[0]))) {
-          _propNameValueList.removeWhere((list) =>
-              list.any((element) => element.propertyName == property.name));
-        }
-      }
-    });
-  }
+  //   // create new series data
+  //   valuesMap.forEach((propertyName, deviceValues) {
+  //     var tempData = deviceValues
+  //         .map((item) => LinearPropertyValue(
+  //             value: double.parse(item.value), dateTime: item.dateTime))
+  //         .toList();
 
-  void createChartSeries(List<List<ViewDeviceValueDto>> dataList) {
-    List<LinearPropertyValue> tempData = [];
-    print('dataList:');
-    dataList.forEach((element) {
-      print(' list:');
-      element.forEach((e) {
-        print(e.value);
-      });
-    });
-    print('-------------');
+  //     _seriesListData[propertyName] = tempData;
+  //   });
+  // }
 
-    dataList.forEach((list) {
-      list.forEach((element) {
-        tempData.add(new LinearPropertyValue(
-            value: double.parse(element.value), dateTime: element.dateTime));
-      });
-      print('tempData:');
-      tempData.forEach((element) {
-        print(element.value);
-      });
-
-      _seriesListData.add(tempData);
-      /* _seriesList.add(
-        new charts.Series<LinearPropertyValue, int>(
-            id: list[0].propertyName,
-            domainFn: (LinearPropertyValue propertyValue, _) =>
-                propertyValue.dateTime.second,
-            measureFn: (LinearPropertyValue propertyValue, _) =>
-                propertyValue.value.toInt(),
-            data: _seriesListData[i],
-            seriesCategory: 'buuu',
-            overlaySeries: true,
-            displayName: list[0].propertyName),
-      );*/
-      tempData = [];
-    });
-  }
-
-  Future getExelFile() async {
+  Future _getExelFile() async {
     html.window.open(
         Uri.encodeFull(
             'http://51.158.163.165/api/device-jobs/${Global.deviceJob.id}/export-all-job-values'),
@@ -138,9 +110,6 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
   }
 
   Widget _buildSelectChartDataArea(BuildContext context) {
-    fetchPropertyNameValue();
-    createChartSeries(_propNameValueList);
-
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -224,7 +193,7 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
           child: FloatingActionButton(
             mini: true, //??
             onPressed: () {
-              getExelFile();
+              _getExelFile();
             },
             child: Icon(
               Icons.download_sharp,
@@ -276,13 +245,14 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
         tooltipBehavior: _tooltipBehavior,
         plotAreaBorderColor: Colors.transparent,
         series: <ChartSeries>[
-          for (int i = 0; i < _propNameValueList.length; i++)
+          //for (int i = 0; i < _propNameList.length; i++)
+          for (var checkedProp in _propNameList.where((prop) => prop.isCheck))
             LineSeries<ViewDeviceValueDto, DateTime>(
                 width: 2,
-                name: _propNameValueList[i][0].propertyName,
-                color: Colors.teal[400 + (i * 200)],
+                name: checkedProp.name,
+                color: Colors.teal[400 + (1 * 200)],
                 //.blueGrey[400 + (i * 200)], //leftMenuColor,
-                dataSource: _propNameValueList[i],
+                dataSource: _devJobValuesGrouped[checkedProp.name]!,
                 xValueMapper: (ViewDeviceValueDto deviceValueDto, _) =>
                     deviceValueDto.dateTime,
                 yValueMapper: (ViewDeviceValueDto deviceValueDto, _) =>
@@ -317,24 +287,11 @@ class PropName {
   PropName({this.isCheck = false, required this.name});
   bool isCheck;
   String name;
-
-  static List<PropName> getPropNames() {
-    List<String> tempList = [];
-    List<String> tempUniqueList = [];
-    List<PropName> finalList = [];
-    _CompletedJobDetailsPageState._deviceJobValues
-        .forEach((f) => tempList.add(f.propertyName));
-    tempUniqueList = new Set<String>.from(tempList).toList();
-    tempUniqueList.forEach((element) {
-      finalList.add(new PropName(name: element));
-    });
-    return finalList;
-  }
 }
 
-class LinearPropertyValue {
-  LinearPropertyValue({required this.value, required this.dateTime});
+// class LinearPropertyValue {
+//   LinearPropertyValue({required this.value, required this.dateTime});
 
-  double value;
-  DateTime dateTime;
-}
+//   double value;
+//   DateTime dateTime;
+// }
