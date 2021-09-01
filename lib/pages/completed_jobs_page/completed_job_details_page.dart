@@ -5,9 +5,15 @@ import 'package:robo_lab_web/dto/view_device_value_dto.dart';
 import 'package:robo_lab_web/requests/device_jobs_requests.dart';
 import 'package:syncfusion_flutter_charts/charts.dart';
 import '../../global.dart';
-import 'dart:async';
-import 'dart:html' as html;
 import "package:collection/collection.dart";
+
+import 'dart:convert';
+import 'dart:html';
+import 'dart:async';
+import 'dart:ui' as dart_ui;
+import 'package:flutter/services.dart';
+import 'package:syncfusion_flutter_pdf/pdf.dart';
+import 'dart:html' as html;
 
 class CompletedJobDetailsPage extends StatefulWidget {
   final ViewDeviceJobDto deviceJob;
@@ -23,7 +29,7 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
   // raw data
   late List<PropName> _propNameList;
   late Map<String, List<ViewDeviceValueDto>> _devJobValuesGrouped;
-
+  final GlobalKey<SfCartesianChartState> _chartKey = GlobalKey();
   late Future<bool> _dataLoaded;
 
   // chart data
@@ -109,13 +115,48 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
         'open');
   }
 
+  Future<void> _renderPdf() async {
+    final PdfDocument document = PdfDocument();
+    final PdfBitmap bitmap = PdfBitmap(await _readImageData());
+    document.pageSettings.orientation =
+        MediaQuery.of(context).orientation == Orientation.landscape
+            ? PdfPageOrientation.landscape
+            : PdfPageOrientation.portrait;
+    document.pageSettings.margins.all = 0;
+    document.pageSettings.size =
+        Size(bitmap.width.toDouble(), bitmap.height.toDouble());
+    final PdfPage page = document.pages.add();
+    final Size pageSize = page.getClientSize();
+    page.graphics.drawImage(
+        bitmap, Rect.fromLTWH(0, 0, pageSize.width, pageSize.height));
+    ScaffoldMessenger.of(context).hideCurrentSnackBar();
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+      behavior: SnackBarBehavior.floating,
+      shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.all(Radius.circular(5))),
+      duration: Duration(milliseconds: 200),
+      content: Text('Chart has been exported as PDF document'),
+    ));
+    final List<int> bytes = document.save();
+    document.dispose();
+    await FileSaveHelper.saveAndLaunchFile(bytes, 'cartesian_chart.pdf');
+  }
+
+  Future<List<int>> _readImageData() async {
+    final dart_ui.Image data =
+        await _chartKey.currentState!.toImage(pixelRatio: 3.0);
+    final ByteData? bytes =
+        await data.toByteData(format: dart_ui.ImageByteFormat.png);
+    return bytes!.buffer.asUint8List(bytes.offsetInBytes, bytes.lengthInBytes);
+  }
+
   Widget _buildSelectChartDataArea(BuildContext context) {
     return Column(
       mainAxisAlignment: MainAxisAlignment.start,
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Container(
-          margin: EdgeInsets.fromLTRB(20, 40, 10, 10),
+          margin: EdgeInsets.fromLTRB(20, 20, 10, 10),
           child: Text(
             'Select chart data',
             style: TextStyle(
@@ -184,12 +225,12 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
           //'Download excel file with all the results.',
           style: TextStyle(
             color: darkerSteelBlue,
-            fontSize: 16,
+            fontSize: 15,
             fontWeight: FontWeight.bold,
           ),
         ),
         Container(
-          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+          //padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
           child: FloatingActionButton(
             mini: true, //??
             onPressed: () {
@@ -197,7 +238,6 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
             },
             child: Icon(
               Icons.download_sharp,
-              size: 22,
             ),
             backgroundColor: peachPuff,
             hoverColor: lightBlueGrey,
@@ -209,8 +249,40 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
     );
   }
 
+  Widget _buildDownloadPDFButton(BuildContext context) {
+    return Column(
+      children: [
+        Text(
+          'Download PDF file with chart view.',
+          //'Download excel file with all the results.',
+          style: TextStyle(
+            color: darkerSteelBlue,
+            fontSize: 15,
+            fontWeight: FontWeight.bold,
+          ),
+        ),
+        Container(
+            //padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            child: FloatingActionButton(
+          mini: true,
+          child: Icon(
+            Icons.picture_as_pdf,
+          ),
+          backgroundColor: peachPuff,
+          hoverColor: lightBlueGrey,
+          elevation: 5,
+          tooltip: 'Download PDF file',
+          onPressed: () {
+            _renderPdf();
+          },
+        ))
+      ],
+    );
+  }
+
   Widget _buildMultiSeriesChartData(BuildContext context) {
     return SfCartesianChart(
+        key: _chartKey,
         backgroundColor: Colors.transparent,
         title: ChartTitle(
           text: 'Results of the completed job: ${Global.deviceJob.id}',
@@ -233,7 +305,7 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
             position: LegendPosition.top,
             alignment: ChartAlignment.center,
             //offset: Offset(40, 40),
-            backgroundColor: Colors.white,
+            backgroundColor: Colors.transparent,
             overflowMode: LegendItemOverflowMode.wrap,
             title: LegendTitle(
                 text: 'Data',
@@ -284,7 +356,7 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
 
   Widget _buildChartDataSide(BuildContext context) {
     return Container(
-      margin: EdgeInsets.fromLTRB(30, 40, 10, 15),
+      margin: EdgeInsets.fromLTRB(30, 20, 10, 15),
       child: Column(
         children: [
           Expanded(
@@ -296,9 +368,17 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
             thickness: 1.5,
           ),
           Expanded(
+              child:
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            _buildDownloadExcelButton(context),
+          ])),
+          SizedBox(
+            height: 4,
+          ),
+          Expanded(
               child: Row(
-                  mainAxisAlignment: MainAxisAlignment.end,
-                  children: [_buildDownloadExcelButton(context)]))
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [_buildDownloadPDFButton(context)])),
         ],
       ),
     );
@@ -311,6 +391,17 @@ class PropName {
   String name;
 }
 
+class FileSaveHelper {
+  ///To save the pdf file in the device
+  static Future<void> saveAndLaunchFile(
+      List<int> bytes, String fileName) async {
+    AnchorElement(
+        href:
+            'data:application/octet-stream;charset=utf-16le;base64,${base64.encode(bytes)}')
+      ..setAttribute('download', fileName)
+      ..click();
+  }
+}
 // class LinearPropertyValue {
 //   LinearPropertyValue({required this.value, required this.dateTime});
 
