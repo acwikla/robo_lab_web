@@ -39,7 +39,7 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
 
   @override
   void initState() {
-    _dataLoaded = DeviceJobsRequests.getDeviceJobValues(Global.deviceJob.id)
+    _dataLoaded = DeviceJobsRequests.getDeviceJobValues(widget.deviceJob.id)
         .then((values) {
       //setState(() {
       // all device values grouped by property name
@@ -111,7 +111,7 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
   Future _getExelFile() async {
     html.window.open(
         Uri.encodeFull(
-            'http://51.158.163.165/api/device-jobs/${Global.deviceJob.id}/export-all-job-values'),
+            'http://51.158.163.165/api/device-jobs/${widget.deviceJob.id}/export-all-job-values'),
         'open');
   }
 
@@ -285,7 +285,7 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
         key: _chartKey,
         backgroundColor: Colors.transparent,
         title: ChartTitle(
-          text: 'Results of the completed job: ${Global.deviceJob.id}',
+          text: 'Results of the completed job: ${widget.deviceJob.id}',
           alignment: ChartAlignment.far,
           textStyle: TextStyle(
             color: darkerSteelBlue,
