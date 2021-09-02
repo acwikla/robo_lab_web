@@ -56,9 +56,7 @@ class _CompletedJobsListPageState extends State<CompletedJobsListPage> {
   ListTile _buildItemsForListView(ViewDeviceJobDto devJob) {
     return ListTile(
       title: Text(devJob.job.name, style: TextStyle(fontSize: 20)),
-      subtitle: Text(
-          'Id: ' + devJob.id.toString() + ', done: ' + devJob.done.toString(),
-          style: TextStyle(fontSize: 16)),
+      subtitle: _getSubtitleText(devJob),
       leading: _getIcon(devJob),
       onTap: () {
         setState(() {
@@ -70,6 +68,15 @@ class _CompletedJobsListPageState extends State<CompletedJobsListPage> {
         //Navigator.pushReplacementNamed(context, routes.deviceDetails);
       },
     );
+  }
+
+  Text _getSubtitleText(ViewDeviceJobDto devJob) {
+    var style = TextStyle(fontSize: 16);
+    //if (devJob.done == true) style = TextStyle(fontSize: 16, color: peachPuff);
+
+    return Text(
+        'Id: ' + devJob.id.toString() + ', done: ' + devJob.done.toString(),
+        style: style);
   }
 
   Widget _getIcon(ViewDeviceJobDto devJob) {
