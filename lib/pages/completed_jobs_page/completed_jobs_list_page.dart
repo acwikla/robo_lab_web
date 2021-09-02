@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:robo_lab_web/constants/controllers_instance.dart';
+import 'package:robo_lab_web/constants/style_const.dart';
 import 'package:robo_lab_web/dto/view_device_job_dto.dart';
 import 'package:robo_lab_web/global.dart';
 import 'package:robo_lab_web/gui.dart';
@@ -72,6 +73,9 @@ class _CompletedJobsListPageState extends State<CompletedJobsListPage> {
   }
 
   Widget _getIcon(ViewDeviceJobDto devJob) {
-    return Icon(Icons.circle);
+    return Icon(
+      Icons.circle,
+      color: peachPuff,
+    );
   }
 }

@@ -322,7 +322,7 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
             LineSeries<ViewDeviceValueDto, DateTime>(
                 width: 2,
                 name: checkedProp.name,
-                color: Colors.teal[400 + (1 * 200)],
+                //  color: Colors.teal[400 + (1 * 200)],
                 //.blueGrey[400 + (i * 200)], //leftMenuColor,
                 dataSource: _devJobValuesGrouped[checkedProp.name]!,
                 xValueMapper: (ViewDeviceValueDto deviceValueDto, _) =>
