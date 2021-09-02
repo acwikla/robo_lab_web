@@ -8,11 +8,11 @@ import 'requests_helper.dart';
 import 'package:http/http.dart' as http;
 
 class DeviceJobsRequests {
-  static final String _baseUrl = Config.ApiAddress + '/device-jobs';
+  static final String baseUrl = Config.ApiAddress + '/device-jobs';
 
   static Future<List<ViewDeviceValueDto>> getDeviceJobValues(int id) async {
     return await RequestsHelper.getReturnList<ViewDeviceValueDto>(
-        'http://51.158.163.165/api/device-jobs/$id/get-all-job-values',
+        baseUrl + '/$id/get-all-job-values',
         (map) => ViewDeviceValueDto.fromMap(map));
   }
 
@@ -20,8 +20,7 @@ class DeviceJobsRequests {
   static Future<DeviceJobDto> postDeviceJob(
       int deviceId, int jobId, DeviceJobDto devJob) async {
     final response = await http.post(
-      Uri.parse(
-          'http://51.158.163.165/api/device-jobs/device/$deviceId/job/$jobId'),
+      Uri.parse(baseUrl + '/device/$deviceId/job/$jobId'),
       headers: <String, String>{
         'accept': 'text/plain',
         'Content-Type': 'application/json; charset=UTF-8',
@@ -47,6 +46,6 @@ class DeviceJobsRequests {
   static Future<List<ViewDeviceJobDto>> getDeviceJobsForDevice(
       int deviceId) async {
     return await RequestsHelper.getReturnList<ViewDeviceJobDto>(
-        _baseUrl + '/device/$deviceId', (map) => ViewDeviceJobDto.fromMap(map));
+        baseUrl + '/device/$deviceId', (map) => ViewDeviceJobDto.fromMap(map));
   }
 }

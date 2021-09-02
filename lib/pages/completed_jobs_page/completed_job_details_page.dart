@@ -110,8 +110,8 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
 
   Future _getExelFile() async {
     html.window.open(
-        Uri.encodeFull(
-            'http://51.158.163.165/api/device-jobs/${widget.deviceJob.id}/export-all-job-values'),
+        Uri.encodeFull(DeviceJobsRequests.baseUrl +
+            '/${widget.deviceJob.id}/export-all-job-values'),
         'open');
   }
 
