@@ -166,8 +166,8 @@ class _SetJobPageState extends State<SetJobPage> {
                   newDeviceJob?.body = _jobBodyValue;
                   newDeviceJob?.executionTime = '2021-08-10T21:36:17.9426078';
                   _futureDeviceJob = DeviceJobsRequests.postDeviceJob(
-                      1, //GlobalData.globalDevice.id,
-                      1, //selectedJob!.id,
+                      /*1,*/ Global.device.id,
+                      /*1*,*/ selectedJob!.id,
                       newDeviceJob!);
                 });
                 print(newDeviceJob!.body);

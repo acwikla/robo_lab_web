@@ -337,7 +337,7 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
         ],
         primaryXAxis: DateTimeAxis(
           edgeLabelPlacement: EdgeLabelPlacement.shift,
-          //dateFormat: DateFormat.y(),
+          //intervalType: DateTimeIntervalType.seconds,
           labelStyle: TextStyle(color: Colors.black87, fontSize: 13),
           axisLine: AxisLine(color: lightBlueGrey),
           title: AxisTitle(
@@ -349,7 +349,7 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
         ),
         primaryYAxis: NumericAxis(
             axisLine: AxisLine(color: lightBlueGrey),
-            //decimalPlaces: 4,
+            decimalPlaces: 4,
             labelFormat: '{value}',
             labelStyle: TextStyle(color: Colors.black87, fontSize: 13)));
   }
