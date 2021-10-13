@@ -170,6 +170,21 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
         Expanded(
           child: _buildCheckBoxList(context),
         ),
+        Container(
+            margin: EdgeInsets.fromLTRB(20, 20, 10, 10),
+            child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisSize: MainAxisSize.max,
+                mainAxisAlignment: MainAxisAlignment.end,
+                children: [
+                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+                    _buildDownloadExcelButton(context),
+                  ]),
+                  Divider(height: 20),
+                  Row(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      children: [_buildDownloadPDFButton(context)]),
+                ]))
         //Container(
         //margin: EdgeInsets.fromLTRB(20, 40, 10, 30),
         //child: _buildDownloadExcelButton(context),
@@ -230,7 +245,7 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
           ),
         ),
         Container(
-          //padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+          padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
           child: FloatingActionButton(
             mini: true, //??
             onPressed: () {
@@ -262,20 +277,20 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
           ),
         ),
         Container(
-            //padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
+            padding: EdgeInsets.fromLTRB(0, 10, 0, 10),
             child: FloatingActionButton(
-          mini: true,
-          child: Icon(
-            Icons.picture_as_pdf,
-          ),
-          backgroundColor: peachPuff,
-          hoverColor: lightBlueGrey,
-          elevation: 5,
-          tooltip: 'Download PDF file',
-          onPressed: () {
-            _renderPdf();
-          },
-        ))
+              mini: true,
+              child: Icon(
+                Icons.picture_as_pdf,
+              ),
+              backgroundColor: peachPuff,
+              hoverColor: lightBlueGrey,
+              elevation: 5,
+              tooltip: 'Download PDF file',
+              onPressed: () {
+                _renderPdf();
+              },
+            ))
       ],
     );
   }
@@ -363,22 +378,6 @@ class _CompletedJobDetailsPageState extends State<CompletedJobDetailsPage> {
             flex: 7,
             child: _buildMultiSeriesChartData(context),
           ),
-          Divider(
-            color: lightBlueGrey.withOpacity(.6),
-            thickness: 1.5,
-          ),
-          Expanded(
-              child:
-                  Row(mainAxisAlignment: MainAxisAlignment.center, children: [
-            _buildDownloadExcelButton(context),
-          ])),
-          SizedBox(
-            height: 4,
-          ),
-          Expanded(
-              child: Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [_buildDownloadPDFButton(context)])),
         ],
       ),
     );

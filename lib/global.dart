@@ -18,7 +18,7 @@ class Global {
       user: user);
 
   static ViewDeviceJobDto deviceJob = ViewDeviceJobDto(
-      id: 67,
+      id: 599,
       deviceId: 120,
       done: true,
       job: JobDto(
