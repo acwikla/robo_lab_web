@@ -60,10 +60,10 @@ class _CompletedJobsListPageState extends State<CompletedJobsListPage> {
       leading: _getIcon(devJob),
       onTap: () {
         setState(() {
-          if (devJob.done) {
-            navigationController.navigateTo(completedJobDetailsPageRoute,
-                arguments: devJob);
-          }
+          //if (devJob.done) {
+          navigationController.navigateTo(completedJobDetailsPageRoute,
+              arguments: devJob);
+          //}
         });
         //Navigator.pushReplacementNamed(context, routes.deviceDetails);
       },
