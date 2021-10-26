@@ -62,6 +62,7 @@ class _SetJobPageState extends State<SetJobPage> {
                 onChanged: (newValue) {
                   setState(() {
                     selectedJob = newValue;
+                    _jobBody.clear();
                   });
                 },
                 items: snapshot.data!.map((job) {
@@ -100,40 +101,55 @@ class _SetJobPageState extends State<SetJobPage> {
       Padding(
           padding: EdgeInsets.fromLTRB(5, 5, 0, 0),
           child: Text(selectedJob!.description,
-              style: TextStyle(color: Colors.black54, fontSize: 14))),
+              style: TextStyle(
+                  color: Colors.black54,
+                  fontSize: 14,
+                  fontStyle: FontStyle.italic))),
       SizedBox(height: 30),
     ]);
   }
 
   Widget _fillDevJobData(BuildContext context) {
-    return Form(
-        key: _formKey,
-        child: Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          Text('Please fill the data', style: Gui.textStyleParagraph),
-          Divider(color: Colors.grey),
-          ListView.builder(
-              shrinkWrap: true,
-              itemCount: jobProperties?.length ?? 0,
-              itemBuilder: (BuildContext context, index) {
-                return Column(children: [
-                  new Row(children: [
-                    new Flexible(
-                        child: new TextFormField(
-                      onSaved: (value) =>
-                          {_jobBody.set(jobProperties![index].name!, value)},
-                      textInputAction: TextInputAction.next,
-                      cursorColor: Colors.grey,
-                      decoration:
-                          Gui.inputDecoration(jobProperties![index].name),
-                      validator: Validator.notNullOrEmpty,
-                    )),
-                  ]),
-                  SizedBox(height: 15),
-                ]);
-              }),
-          //_orderDevJobButton(context)
-          _buildSubmitDevJobButton(context)
-        ]));
+    if (jobProperties?.length == 0) {
+      return Form(
+          key: _formKey,
+          child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                SizedBox(height: 15),
+                _buildSubmitDevJobButton(context)
+              ]));
+    } else {
+      return Form(
+          key: _formKey,
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text('Please fill the data', style: Gui.textStyleParagraph),
+            Divider(color: Colors.grey),
+            ListView.builder(
+                shrinkWrap: true,
+                itemCount: jobProperties?.length ?? 0,
+                itemBuilder: (BuildContext context, index) {
+                  return Column(children: [
+                    new Row(children: [
+                      new Flexible(
+                          child: new TextFormField(
+                        onSaved: (value) =>
+                            {_jobBody.set(jobProperties![index].name!, value)},
+                        textInputAction: TextInputAction.next,
+                        cursorColor: Colors.grey,
+                        decoration:
+                            Gui.inputDecoration(jobProperties![index].name),
+                        validator: Validator.notNullOrEmpty,
+                      )),
+                    ]),
+                    SizedBox(height: 15),
+                  ]);
+                }),
+            //_orderDevJobButton(context)
+            _buildSubmitDevJobButton(context)
+          ]));
+    }
   }
 
   Widget _buildSubmitDevJobButton(BuildContext context) {

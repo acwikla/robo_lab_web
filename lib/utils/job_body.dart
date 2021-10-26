@@ -5,6 +5,10 @@ class JobBody {
     _map[name] = value;
   }
 
+  void clear() {
+    _map.clear();
+  }
+
   @override
   String toString() {
     String result = '';
