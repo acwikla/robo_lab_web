@@ -28,6 +28,8 @@ class MenuController extends GetxController {
         return _customIcon(Icons.home_outlined, itemName);
       case devicesPageRoute:
         return _customIcon(Icons.precision_manufacturing, itemName);
+      case createDevicePageRoute:
+        return _customIcon(Icons.add_circle_outlined, itemName);
       case setJobPageRoute:
         return _customIcon(Icons.play_circle, itemName);
       case deviceCompletedJobsPageRoute:
