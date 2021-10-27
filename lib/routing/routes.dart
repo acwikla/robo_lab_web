@@ -6,7 +6,8 @@ const deviceCompletedJobsPageRoute = "Completed Jobs";
 const devicePendingsJobsPageRoute = "Pendings Jobs";
 const devicePropertiesPageRoute = "Device Properties";
 const diagramsPageRoute = "Diagrams";
-const createDevicePageRoute = "Create Device";
+const createDeviceTypePageRoute = "Create Device Type";
+const AddDevicePageRoute = "Add Device";
 const authenticationPageRoute = "Authentication";
 const exampleTable = "Example Table";
 
@@ -17,7 +18,8 @@ const completedJobDetailsPageRoute = "Completed Job Details";
 List sideMenuItems = [
   homePageRoute,
   devicesPageRoute,
-  createDevicePageRoute,
+  createDeviceTypePageRoute,
+  AddDevicePageRoute,
   setJobPageRoute,
   deviceCompletedJobsPageRoute,
   //devicePendingsJobsPageRoute,

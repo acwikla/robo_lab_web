@@ -23,15 +23,22 @@ class MenuController extends GetxController {
   isHovering(String itemName) => hoverItem.value == itemName;
 
   Widget returnIconFor(String itemName) {
+    //reply_outlined
+    //toys
+    //add_task_outlined
     switch (itemName) {
       case homePageRoute:
         return _customIcon(Icons.home_outlined, itemName);
       case devicesPageRoute:
         return _customIcon(Icons.precision_manufacturing, itemName);
-      case createDevicePageRoute:
+      case createDeviceTypePageRoute:
+        return _customIcon(Icons.data_saver_on_outlined, itemName);
+      case AddDevicePageRoute:
         return _customIcon(Icons.add_circle_outlined, itemName);
       case setJobPageRoute:
-        return _customIcon(Icons.play_circle, itemName);
+        //post_add_outlined
+        //play_circle
+        return _customIcon(Icons.add_task_outlined, itemName);
       case deviceCompletedJobsPageRoute:
         return _customIcon(Icons.check_box_outlined, itemName);
       case devicePendingsJobsPageRoute:

@@ -9,20 +9,17 @@ import 'package:robo_lab_web/requests/device_type_requests.dart';
 import '../../gui.dart';
 import '../../validator.dart';
 
-class CreateDevicePage extends StatefulWidget {
-  const CreateDevicePage({Key? key}) : super(key: key);
+class AddDevicePage extends StatefulWidget {
+  const AddDevicePage({Key? key}) : super(key: key);
 
   @override
-  _CreateDevicePageState createState() => _CreateDevicePageState();
+  _AddDevicePageState createState() => _AddDevicePageState();
 }
 
-class _CreateDevicePageState extends State<CreateDevicePage> {
+class _AddDevicePageState extends State<AddDevicePage> {
   late Future<List<DeviceTypeDTO>> _deviceTypes;
-  late String? _newDevTypeName = '';
   late String? _newDeviceName = '';
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final GlobalKey<FormState> _formKey2 = GlobalKey<FormState>();
-  Future<DeviceTypeDTO>? _futureDeviceType;
   Future<ViewDeviceDto>? _futureDevice;
   DeviceTypeDTO? _selectedDeviceType;
 
@@ -37,28 +34,8 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
     return Container(
         width: 3,
         child: ListView(padding: new EdgeInsets.all(10.0), children: [
-          Text('Create device panel', style: Gui.textStylePageTitle),
+          Text('Device panel', style: Gui.textStylePageTitle),
           SizedBox(height: 30),
-          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('Create new device type:', style: Gui.textStyleParagraph),
-            SizedBox(height: 10),
-            //Divider(color: Colors.grey, height: 2)
-          ]),
-          Form(
-              key: _formKey,
-              child: TextFormField(
-                onSaved: (value) => {_newDevTypeName = value},
-                textInputAction: TextInputAction.next,
-                cursorColor: Colors.grey,
-                decoration: Gui.inputDecoration('Device Type Name'),
-                validator: Validator.notNullOrEmpty,
-              )),
-          SizedBox(height: 15),
-          _buildCreateDeviceTypeButton(context),
-          SizedBox(
-            height: 30,
-            child: Divider(color: peachPuff, thickness: 1),
-          ),
           Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text('Add new device:', style: Gui.textStyleParagraph),
             //SizedBox(height: 10),
@@ -69,52 +46,11 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
           _addNewDeviceArea(context),
           SizedBox(height: 15),
           _buildAddDeviceButton(context),
-          SizedBox(height: 15),
+          SizedBox(
+            height: 30,
+            child: Divider(color: peachPuff, thickness: 1),
+          ),
         ]));
-  }
-
-  Widget _buildCreateDeviceTypeButton(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.center,
-      children: [
-        Text(
-          'Click button to create a new device type.',
-          style: TextStyle(
-            color: darkerSteelBlue,
-            fontSize: 17,
-            fontWeight: FontWeight.bold,
-          ),
-        ),
-        Container(
-          padding: EdgeInsets.fromLTRB(0, 10, 0, 0),
-          child: FloatingActionButton(
-            mini: true,
-            onPressed: () {
-              // Validate will return true if the form is valid
-              if (_formKey.currentState!.validate()) {
-                // Process data.
-                setState(() {
-                  _formKey.currentState!.save(); // run TextFormField onSaved
-                  print("_newDevTypeName: " + _newDevTypeName.toString());
-                  _futureDeviceType =
-                      DeviceTypeRequests.createDeviceType(_newDevTypeName!);
-                });
-              }
-            },
-            child: Icon(
-              Icons.check,
-              size: 25,
-            ),
-            backgroundColor: peachPuff,
-            hoverColor: lightBlueGrey,
-            elevation: 5,
-            tooltip: 'Create device type',
-          ),
-        ),
-        SizedBox(height: 10),
-        _returnRequestMessage(context, _futureDeviceType, 'device type'),
-      ],
-    );
   }
 
   Widget _buildAddDeviceButton(BuildContext context) {
@@ -135,11 +71,11 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
             mini: true,
             onPressed: () {
               // Validate will return true if the form is valid
-              if (_formKey2.currentState!.validate()) {
+              if (_formKey.currentState!.validate()) {
                 // Process data.
                 setState(() {
-                  _formKey2.currentState!.save(); // run TextFormField onSaved
-                  print("_newDevTypeName: " + _newDeviceName.toString());
+                  _formKey.currentState!.save(); // run TextFormField onSaved
+                  print("_newDevName: " + _newDeviceName.toString());
                   _futureDevice = DeviceRequests.addDevice(
                       _newDeviceName, _selectedDeviceType?.name);
                 });
@@ -193,7 +129,7 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
 
   Widget _addNewDeviceArea(BuildContext context) {
     return Form(
-        key: _formKey2,
+        key: _formKey,
         child: TextFormField(
           onSaved: (value) => {_newDeviceName = value},
           textInputAction: TextInputAction.next,
@@ -226,11 +162,3 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
     );
   }
 }
-
-
-//_fillDeviceTypeName
-//_addDeviceTypeButton
-//_selectDeviceTypeList
-//_addDeviceArea
-//_addDeviceButton
-//_summaryCard

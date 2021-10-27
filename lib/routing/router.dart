@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:robo_lab_web/dto/view_device_job_dto.dart';
+import 'package:robo_lab_web/pages/add_device/add_device_page.dart';
 import 'package:robo_lab_web/pages/completed_jobs_page/completed_job_details_page.dart';
 import 'package:robo_lab_web/pages/completed_jobs_page/completed_jobs_list_page.dart';
 import 'package:robo_lab_web/pages/completed_jobs_page/single_series_chart.dart';
 import 'package:robo_lab_web/pages/completed_jobs_page/ugly_multiple_series_chart.dart';
-import 'package:robo_lab_web/pages/create_device_page/create_device_page.dart';
+import 'package:robo_lab_web/pages/create_device_type/create_device_type_page.dart';
 import 'package:robo_lab_web/pages/diagrams/diagrams_page.dart';
 import 'package:robo_lab_web/pages/devices_list_page.dart';
 import 'package:robo_lab_web/pages/home_page/home_page.dart';
@@ -19,8 +20,10 @@ Route<dynamic> generateRoute(RouteSettings settings) {
     //return _getPageRoute(HomePage());
     case devicesPageRoute:
       return _getPageRoute(DevicesListPage());
-    case createDevicePageRoute:
-      return _getPageRoute(CreateDevicePage());
+    case createDeviceTypePageRoute:
+      return _getPageRoute(CreateDeviceTypePage());
+    case AddDevicePageRoute:
+      return _getPageRoute(AddDevicePage());
     case setJobPageRoute:
       return _getPageRoute(SetJobPage());
     case deviceCompletedJobsPageRoute:
