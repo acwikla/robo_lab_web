@@ -31,13 +31,13 @@ class _CreateDeviceTypePageState extends State<CreateDeviceTypePage> {
     return Container(
         width: 3,
         child: ListView(padding: new EdgeInsets.all(10.0), children: [
-          Text('Create device type panel', style: Gui.textStylePageTitle),
+          Text('Device type panel', style: Gui.textStylePageTitle),
           SizedBox(height: 30),
-          //Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-          //Text('Create new device type:', style: Gui.textStyleParagraph),
-          //SizedBox(height: 10),
-          //Divider(color: Colors.grey, height: 2)
-          //]),
+          Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text('Create new device type:', style: Gui.textStyleParagraph),
+            SizedBox(height: 10),
+            //Divider(color: Colors.grey, height: 2)
+          ]),
           Form(
               key: _formKey,
               child: TextFormField(
