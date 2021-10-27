@@ -111,6 +111,7 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
             tooltip: 'Create device type',
           ),
         ),
+        SizedBox(height: 10),
         _returnRequestMessage(context, _futureDeviceType, 'device type'),
       ],
     );
@@ -154,6 +155,7 @@ class _CreateDevicePageState extends State<CreateDevicePage> {
             tooltip: 'Add device',
           ),
         ),
+        SizedBox(height: 10),
         _returnRequestMessage(context, _futureDevice, 'device')
       ],
     );
