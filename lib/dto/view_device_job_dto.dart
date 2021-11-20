@@ -7,6 +7,7 @@ class ViewDeviceJobDto {
       {required this.id,
       required this.deviceId,
       required this.done,
+      required this.title,
       //required this.jobId,
       //required this.createdDate,
       //required this.executionTime,
@@ -20,6 +21,7 @@ class ViewDeviceJobDto {
   //String executionTime;
   String body;
   JobDto job;
+  String title;
 
   factory ViewDeviceJobDto.fromJson(String str) =>
       ViewDeviceJobDto.fromMap(json.decode(str));
@@ -31,6 +33,7 @@ class ViewDeviceJobDto {
           id: json["id"],
           deviceId: json["deviceId"],
           done: json["done"],
+          title: json["title"],
           // createdDate: json["createdDate"],
           // executionTime: json["executionTime"],
           body: json["body"],
@@ -40,6 +43,7 @@ class ViewDeviceJobDto {
         "id": id,
         "deviceId": deviceId,
         "done": done,
+        "title": title,
         //"createdDate": createdDate,
         //"executionTime": executionTime,
         "body": body,

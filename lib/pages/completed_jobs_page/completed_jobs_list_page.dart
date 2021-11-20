@@ -55,7 +55,7 @@ class _CompletedJobsListPageState extends State<CompletedJobsListPage> {
 
   ListTile _buildItemsForListView(ViewDeviceJobDto devJob) {
     return ListTile(
-      title: Text(devJob.job.name, style: TextStyle(fontSize: 20)),
+      title: Text(devJob.title, style: TextStyle(fontSize: 20)),
       subtitle: _getSubtitleText(devJob),
       leading: _getIcon(devJob),
       onTap: () {
@@ -75,7 +75,12 @@ class _CompletedJobsListPageState extends State<CompletedJobsListPage> {
     //if (devJob.done == true) style = TextStyle(fontSize: 16, color: peachPuff);
 
     return Text(
-        'Id: ' + devJob.id.toString() + ', done: ' + devJob.done.toString(),
+        'Job name: ' +
+            devJob.job.name +
+            ', id: ' +
+            devJob.id.toString() +
+            ', done: ' +
+            devJob.done.toString(),
         style: style);
   }
 

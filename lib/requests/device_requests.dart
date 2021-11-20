@@ -13,10 +13,10 @@ class DeviceRequests {
   }
 
   static Future<ViewDeviceDto> addDevice(
-      String? newDeviceName, String? deviceTypeName) async {
+      String? newDeviceName, int? deviceTypeId) async {
     final response = await http.post(
       Uri.parse(Config.ApiAddress +
-          '/users/1/device?Name=$deviceTypeName&DeviceName=$newDeviceName'),
+          '/users/1/device?deviceTypeId=$deviceTypeId&DeviceName=$newDeviceName'),
       headers: <String, String>{
         'accept': 'text/plain',
         //'Content-Type': 'application/json; charset=UTF-8',

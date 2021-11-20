@@ -24,9 +24,10 @@ class _SetJobPageState extends State<SetJobPage> {
   List<JobProperty>? jobProperties = [];
   var _jobBody = new JobBody();
   String _jobBodyValue = '';
+  String _deviceJobTitle = '';
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
-  DeviceJobDto? newDeviceJob = new DeviceJobDto();
+  DeviceJobDto? newDeviceJob = new DeviceJobDto(title: '');
   Future<DeviceJobDto>? _futureDeviceJob;
 
   @override
@@ -113,12 +114,23 @@ class _SetJobPageState extends State<SetJobPage> {
     if (jobProperties?.length == 0) {
       return Form(
           key: _formKey,
-          child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                SizedBox(height: 15),
-                _buildSubmitDevJobButton(context)
-              ]));
+          child:
+              Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
+            Text('Please fill the data', style: Gui.textStyleParagraph),
+            Divider(color: Colors.grey),
+            new Row(children: [
+              new Flexible(
+                  child: new TextFormField(
+                onSaved: (value) => {_deviceJobTitle = value!},
+                textInputAction: TextInputAction.next,
+                cursorColor: Colors.grey,
+                decoration: Gui.inputDecoration('Device Job Title'),
+                validator: Validator.notNullOrEmpty,
+              )),
+            ]),
+            SizedBox(height: 15),
+            _buildSubmitDevJobButton(context)
+          ]));
     } else {
       return Form(
           key: _formKey,
@@ -126,6 +138,18 @@ class _SetJobPageState extends State<SetJobPage> {
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
             Text('Please fill the data', style: Gui.textStyleParagraph),
             Divider(color: Colors.grey),
+            SizedBox(height: 15),
+            Row(children: [
+              Flexible(
+                  child: new TextFormField(
+                onSaved: (value) => {_deviceJobTitle = value!},
+                textInputAction: TextInputAction.next,
+                cursorColor: Colors.grey,
+                decoration: Gui.inputDecoration('Device Job Title'),
+                validator: Validator.notNullOrEmpty,
+              )),
+            ]),
+            SizedBox(height: 15),
             ListView.builder(
                 shrinkWrap: true,
                 itemCount: jobProperties?.length ?? 0,
@@ -179,6 +203,7 @@ class _SetJobPageState extends State<SetJobPage> {
                   } else {
                     _jobBodyValue = _jobBody.toString();
                   }
+                  newDeviceJob?.title = _deviceJobTitle;
                   newDeviceJob?.body = _jobBodyValue;
                   newDeviceJob?.executionTime = '2021-08-10T21:36:17.9426078';
                   _futureDeviceJob = DeviceJobsRequests.postDeviceJob(
@@ -186,7 +211,11 @@ class _SetJobPageState extends State<SetJobPage> {
                       /*1*,*/ selectedJob!.id,
                       newDeviceJob!);
                 });
+                print('newDeviceJob!.title:');
+                print(newDeviceJob!.title);
+                print('newDeviceJob!.body:');
                 print(newDeviceJob!.body);
+                print('newDeviceJob!.executionTime:');
                 print(newDeviceJob!.executionTime);
               }
             },

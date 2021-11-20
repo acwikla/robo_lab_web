@@ -77,7 +77,7 @@ class _AddDevicePageState extends State<AddDevicePage> {
                   _formKey.currentState!.save(); // run TextFormField onSaved
                   print("_newDevName: " + _newDeviceName.toString());
                   _futureDevice = DeviceRequests.addDevice(
-                      _newDeviceName, _selectedDeviceType?.name);
+                      _newDeviceName, _selectedDeviceType?.id);
                 });
               }
             },
@@ -111,6 +111,9 @@ class _AddDevicePageState extends State<AddDevicePage> {
                 onChanged: (newValue) {
                   setState(() {
                     _selectedDeviceType = newValue;
+                    print('_selectedDeviceType:');
+                    print(_selectedDeviceType!.name);
+                    print(_selectedDeviceType!.id);
                     //_jobBody.clear();
                   });
                 },
