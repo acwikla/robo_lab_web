@@ -18,7 +18,7 @@ class DeviceJobDto {
       body: json["body"]);
 
   Map<String, dynamic> toMap() =>
-      {"executionTime": executionTime, "body": body};
+      {"title": title, "executionTime": executionTime, "body": body};
 
   factory DeviceJobDto.fromJson(Map<String, dynamic> json) {
     return DeviceJobDto(
