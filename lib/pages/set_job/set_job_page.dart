@@ -94,7 +94,7 @@ class _SetJobPageState extends State<SetJobPage> {
 
   Widget _showSelectedJob(BuildContext context) {
     return Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-      Text('Selected job', style: Gui.textStyleParagraph),
+      Text('Selected job', style: Gui.textStyleFootnote),
       Divider(color: Colors.grey, height: 2),
       Padding(
           padding: EdgeInsets.all(5),
@@ -116,7 +116,7 @@ class _SetJobPageState extends State<SetJobPage> {
           key: _formKey,
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('Please fill the data', style: Gui.textStyleParagraph),
+            Text('Please fill the data', style: Gui.textStyleFootnote),
             Divider(color: Colors.grey),
             new Row(children: [
               new Flexible(
@@ -136,9 +136,9 @@ class _SetJobPageState extends State<SetJobPage> {
           key: _formKey,
           child:
               Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
-            Text('Please fill the data', style: Gui.textStyleParagraph),
+            Text('Please fill the data', style: Gui.textStyleFootnote),
             Divider(color: Colors.grey),
-            SizedBox(height: 15),
+            SizedBox(height: 10),
             Row(children: [
               Flexible(
                   child: new TextFormField(
@@ -149,7 +149,7 @@ class _SetJobPageState extends State<SetJobPage> {
                 validator: Validator.notNullOrEmpty,
               )),
             ]),
-            SizedBox(height: 15),
+            SizedBox(height: 10),
             ListView.builder(
                 shrinkWrap: true,
                 itemCount: jobProperties?.length ?? 0,
@@ -167,7 +167,7 @@ class _SetJobPageState extends State<SetJobPage> {
                         validator: Validator.notNullOrEmpty,
                       )),
                     ]),
-                    SizedBox(height: 15),
+                    SizedBox(height: 10),
                   ]);
                 }),
             //_orderDevJobButton(context)
@@ -229,7 +229,7 @@ class _SetJobPageState extends State<SetJobPage> {
             tooltip: 'Submit job',
           ),
         ),
-        SizedBox(height: 15),
+        SizedBox(height: 10),
         _returnRequestMessage(context),
       ],
     );

@@ -10,6 +10,9 @@ class Gui {
   static final textStyleParagraph = TextStyle(
       color: Colors.black87, fontSize: 17, fontWeight: FontWeight.w600);
 
+  static final textStyleFootnote = TextStyle(
+      color: Colors.black54, fontSize: 16, fontWeight: FontWeight.w600);
+
   static final textStyleCasual = TextStyle(
       color: Colors.black87, fontSize: 17, fontWeight: FontWeight.normal);
 
