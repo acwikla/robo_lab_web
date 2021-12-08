@@ -2,14 +2,14 @@ import 'dart:convert';
 
 class JobDto {
   JobDto({
-    required this.id,
+    this.id,
     required this.name,
     required this.description,
     required this.properties,
     required this.deviceTypeName,
   });
 
-  int id;
+  int? id;
   String name;
   String description;
   String properties;
