@@ -28,6 +28,7 @@ class JobRequests {
         "deviceTypeName": newJob.deviceTypeName,
       }),
     );
+    print("newJob.properties: " + newJob.properties);
 
     if (response.statusCode == 201) {
       // If the server did return a 201 CREATED response,

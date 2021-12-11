@@ -19,7 +19,7 @@ class AddJobPage extends StatefulWidget {
 
 class _AddJobPageState extends State<AddJobPage> {
   static final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  //static final GlobalKey<FormState> _propertyFormKey = GlobalKey<FormState>();
+  //GlobalKey<FormState> _propertyFormKey = GlobalKey<FormState>();
 
   late JobDto _newJob = new JobDto(
       id: 0, name: '', description: '', properties: '', deviceTypeName: '');
@@ -142,8 +142,12 @@ class _AddJobPageState extends State<AddJobPage> {
                     print(_selectedDeviceType);
                   });
                 },
-                items: ['DevType1', 'DevType2', 'DevType3', 'DevType4']
-                    .map((String propType) {
+                items: [
+                  'SmartTerra',
+                  'RoboArm(Arexx RA-1-PRO)',
+                  'Dobot Magician V2',
+                  'ROBOLab Press'
+                ].map((String propType) {
                   return DropdownMenuItem<String>(
                       value: propType,
                       child: Row(children: <Widget>[
@@ -204,10 +208,14 @@ class _AddJobPageState extends State<AddJobPage> {
           child: FloatingActionButton(
             //mini: true,
             onPressed: () {
-              if (_formKey.currentState!.validate()) {
+              if (_formKey.currentState!.validate()
+                  //&&_propertyFormKey.currentState!.validate()
+                  ) {
                 // Process data.
                 setState(() {
                   _formKey.currentState!.save(); // run TextFormField onSaved
+                  //_propertyFormKey.currentState!
+                  //.save(); // run TextFormField onSaved
                   print('_newJob.deviceTypeName: ' + _newJob.deviceTypeName);
                   Set<AddPropertyDto> set =
                       Set.from(_PropertyFeildState._jobPropertyList);
@@ -259,9 +267,11 @@ class _AddJobPageState extends State<AddJobPage> {
   }
 
   void _addNewContactRow() {
-    setState(() {
-      _count = _count + 1;
-    });
+    if (_formKey.currentState!.validate()) {
+      setState(() {
+        _count = _count + 1;
+      });
+    }
   }
 }
 
@@ -286,53 +296,57 @@ class _PropertyFeildState extends State<PropertyFeild> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-        padding: EdgeInsets.fromLTRB(0, 0, 0, 7),
-        child: Row(
-          children: [
-            Flexible(
-              child: new TextFormField(
-                onChanged: (value) => {
-                  _newProperty.name = value!,
-                  print('_newProperty.name:'),
-                  print(_newProperty.name)
-                },
-                textInputAction: TextInputAction.next,
-                cursorColor: Colors.grey,
-                decoration: Gui.inputDecoration('Name'),
-                validator: Validator.notNullOrEmpty,
-              ),
-            ),
-            SizedBox(width: 10),
-            Flexible(child: _buildSelectTypeList(context)),
-            SizedBox(width: 10),
-            Flexible(
-                child: new TextFormField(
-              onChanged: (value) => {
-                _newProperty.set('min', value!),
-                print('_newProperty.body:'),
-                print(_newProperty.body),
-              },
-              textInputAction: TextInputAction.next,
-              cursorColor: Colors.grey,
-              decoration: Gui.inputDecoration('Min Value'),
-              //validator: Validator.notNullOrEmpty,
-            )),
-            SizedBox(width: 10),
-            Flexible(
-                child: new TextFormField(
-              onChanged: (value) => {
-                _newProperty.set('max', value),
-                print('_newProperty.body:'),
-                print(_newProperty.body)
-              },
-              textInputAction: TextInputAction.next,
-              cursorColor: Colors.grey,
-              decoration: Gui.inputDecoration('Max Value'),
-              //validator: Validator.notNullOrEmpty,
-            )),
-          ],
-        ));
+    return //Form(
+        //key: _AddJobPageState._propertyFormKey,
+        //child:
+        Container(
+            padding: EdgeInsets.fromLTRB(0, 0, 0, 7),
+            child: Row(
+              children: [
+                Flexible(
+                  child: new TextFormField(
+                    onChanged: (value) => {
+                      _newProperty.name = value!,
+                      print('_newProperty.name:'),
+                      print(_newProperty.name)
+                    },
+                    textInputAction: TextInputAction.next,
+                    cursorColor: Colors.grey,
+                    decoration: Gui.inputDecoration('Name'),
+                    validator: Validator.notNullOrEmpty,
+                  ),
+                ),
+                SizedBox(width: 10),
+                Flexible(child: _buildSelectTypeList(context)),
+                SizedBox(width: 10),
+                Flexible(
+                    child: new TextFormField(
+                  onChanged: (value) => {
+                    _newProperty.set('min', value!),
+                    print('_newProperty.body:'),
+                    print(_newProperty.body),
+                  },
+                  textInputAction: TextInputAction.next,
+                  cursorColor: Colors.grey,
+                  decoration: Gui.inputDecoration('Min Value'),
+                  //validator: Validator.notNullOrEmpty,
+                )),
+                SizedBox(width: 10),
+                Flexible(
+                    child: new TextFormField(
+                  onChanged: (value) => {
+                    _newProperty.set('max', value),
+                    print('_newProperty.body:'),
+                    print(_newProperty.body)
+                  },
+                  textInputAction: TextInputAction.next,
+                  cursorColor: Colors.grey,
+                  decoration: Gui.inputDecoration('Max Value'),
+                  //validator: Validator.notNullOrEmpty,
+                )),
+              ],
+            ));
+    //);
   }
 
   Widget _buildSelectTypeList(BuildContext context) {
